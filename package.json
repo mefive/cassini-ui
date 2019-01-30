@@ -1,0 +1,43 @@
+{
+  "name": "cassini-ui",
+  "version": "0.0.1",
+  "description": "typescript version of ddy-ui",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --fix src/**/*.*",
+    "build": "webpack --mode development --config webpack.config.js"
+  },
+  "keywords": [
+    "react",
+    "component"
+  ],
+  "author": "mefive",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/react": "^16.7.22",
+    "@types/react-dom": "^16.0.11",
+    "@typescript-eslint/eslint-plugin": "^1.1.1",
+    "clean-webpack-plugin": "^1.0.1",
+    "css-loader": "^2.1.0",
+    "eslint": "^5.12.1",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.0",
+    "eslint-plugin-react": "^7.12.4",
+    "eslint-plugin-typescript": "^0.14.0",
+    "node-sass": "^4.11.0",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.2.4",
+    "typescript-eslint-parser": "^22.0.0",
+    "webpack": "^4.29.0",
+    "webpack-cli": "^3.2.1"
+  },
+  "dependencies": {
+    "bootstrap": "^4.2.1",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0"
+  }
+}
