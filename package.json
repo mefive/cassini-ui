@@ -4,6 +4,7 @@
   "description": "typescript version of ddy-ui",
   "main": "index.js",
   "scripts": {
+    "precommit": "lint-staged",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint --fix src/**/*.*",
     "dev": "webpack-dev-server --mode=development --config ./webpack.config.js",
@@ -53,5 +54,11 @@
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-transition-group": "^2.5.3"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "git add"
+    ]
   }
 }

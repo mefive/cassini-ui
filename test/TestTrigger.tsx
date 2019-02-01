@@ -27,7 +27,7 @@ class TestTrigger extends React.PureComponent<Props> {
 
   state = {
     age: 32,
-  }
+  };
 
   private popover = React.createRef<Popover>();
 
