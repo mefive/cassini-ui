@@ -7,6 +7,19 @@ interface Props {
   name?: string,
 }
 
+function popover() {
+  return (
+    <Popover
+      placement={Placement.BOTTOM}
+      className="p-3"
+    >
+      <span>
+        Damn, I am in a Popover
+      </span>
+    </Popover>
+  );
+}
+
 class TestTrigger extends React.PureComponent<Props> {
   static defaultProps = {
     name: 'mefive',
@@ -25,23 +38,24 @@ class TestTrigger extends React.PureComponent<Props> {
   render() {
     return (
       <Container title="Trigger">
-        <div className="text-center">
+        <div className="d-flex justify-content-center">
           <Trigger
             action={Trigger.Action.CLICK}
-            popover={() => (
-              <Popover
-                placement={Placement.BOTTOM_RIGHT}
-                className="p-3"
-              >
-                <span>
-                  Damn, I am in a Popover
-                </span>
-              </Popover>
-            )}
+            popover={popover}
             enterClassName="fade-in"
             leaveClassName="fade-out"
           >
             <div className="btn btn-lg btn-primary">Click</div>
+          </Trigger>
+
+          <Trigger
+            action={Trigger.Action.HOVER_HOLD}
+            popover={popover}
+            enterClassName="slide-down-in"
+            leaveClassName="fade-down-out"
+            leaveDelay={300}
+          >
+            <div className="btn btn-lg btn-primary ml-2">Hover Hold</div>
           </Trigger>
         </div>
       </Container>
