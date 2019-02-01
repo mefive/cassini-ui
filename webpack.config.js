@@ -1,6 +1,7 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const keysTransformer = require('ts-transformer-keys/transformer').default;
 
 module.exports = {
   context: path.resolve(__dirname, './test'),
@@ -21,6 +22,13 @@ module.exports = {
       {
         test: /\.tsx?$/,
         loader: 'ts-loader',
+        options: {
+          getCustomTransformers: program => ({
+            before: [
+              keysTransformer(program),
+            ],
+          }),
+        },
       },
       {
         test: /\.scss$/,

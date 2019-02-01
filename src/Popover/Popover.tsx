@@ -1,6 +1,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import { debounce, omit } from 'lodash';
+import { keys } from 'ts-transformer-keys';
 import safeSetState from '../safeSetState';
 import StyledPopover from './styled';
 
@@ -19,7 +20,7 @@ export enum Placement {
   RIGHT_BOTTOM = 'right-bottom',
 }
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
+interface Props {
   placement?: Placement;
   container?: HTMLElement;
   anchor?: HTMLElement;
@@ -39,7 +40,7 @@ interface PlacementStyleInfo {
 }
 
 @safeSetState
-class Popover extends React.Component<Props> {
+class Popover extends React.Component<Props & React.HTMLAttributes<any>> {
   static Placement = Placement;
 
   static defaultProps = {
@@ -311,9 +312,11 @@ class Popover extends React.Component<Props> {
       style, className, hasArrow, children, ...props
     } = this.props;
 
+    const htmlKeys = keys<Props>();
+
     return (
       <StyledPopover
-        {...omit(props, ['container', 'placement'])}
+        {...omit(props, htmlKeys)}
         className={
           classNames(
             'popover',
