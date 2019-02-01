@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import classNames from 'classnames';
 
 export interface PortalProps extends React.HTMLAttributes<JSX.Element> {
   getContainer?: () => HTMLElement;
@@ -37,7 +38,16 @@ class Portal extends React.PureComponent<PortalProps> {
   private readonly wrapper: HTMLElement;
 
   render() {
-    return ReactDOM.createPortal(this.props.children, this.wrapper);
+    return ReactDOM.createPortal((
+      <React.Fragment>
+        {React.Children.map(this.props.children, (child: JSX.Element) => React.cloneElement(
+          child,
+          {
+            className: classNames(this.props.className, child.props.className),
+          },
+        ))}
+      </React.Fragment>
+    ), this.wrapper);
   }
 }
 

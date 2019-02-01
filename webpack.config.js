@@ -3,7 +3,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  context: path.resolve(__dirname, './src'),
+  context: path.resolve(__dirname, './test'),
 
   entry: {
     index: './index',
@@ -45,6 +45,8 @@ module.exports = {
       filename: 'index.html',
     }),
   ],
+
+  devtool: '#source-map',
 
   devServer: {
     port: 9910,

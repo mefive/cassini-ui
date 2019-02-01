@@ -1,7 +1,13 @@
 {
   "extends": "airbnb",
   "parser": "typescript-eslint-parser",
+//  "parser": "@typescript-eslint/parser",
   "plugins": ["react", "typescript"],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
   "settings": {
     "import/resolver": {
       "node": {
@@ -17,7 +23,8 @@
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".jsx"] }],
     "react/destructuring-assignment": 0,
-    "typescript/no-unused-vars": "warn"
+    "no-unused-vars": "off",
+    "typescript/no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }]
   },
   "env": {
     "browser": true
