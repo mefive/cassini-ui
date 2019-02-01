@@ -30,6 +30,6 @@ const TestGrid = () => (
       </Row>
     </Grid>
   </Container>
-);
+)
 
 export default TestGrid;
