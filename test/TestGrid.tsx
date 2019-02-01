@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { range } from 'lodash';
 import styled from 'styled-components';
+import { lighten } from 'polished';
 
 import Col from '../src/Grid/Col';
 import Grid from '../src/Grid/Grid';
@@ -10,7 +11,7 @@ import Container from './Container';
 const GUTTER = 20;
 
 const ColItem = styled.div`
-  background-color: ${props => props.theme.primary};
+  background-color: ${props => lighten(0.25, props.theme.primary)};
   color: white;
   text-align: center;
   padding-top: 20px;

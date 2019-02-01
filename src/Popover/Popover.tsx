@@ -1,6 +1,6 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import { debounce } from 'lodash';
+import { debounce, omit } from 'lodash';
 import safeSetState from '../safeSetState';
 import StyledPopover from './styled';
 
@@ -307,25 +307,30 @@ class Popover extends React.Component<Props> {
   render() {
     const placement = this.state.placement.split('-');
 
+    const {
+      style, className, hasArrow, children, ...props
+    } = this.props;
+
     return (
       <StyledPopover
+        {...omit(props, ['container', 'placement'])}
         className={
           classNames(
             'popover',
             `bs-popover-${placement[0]}`,
             placement[1],
-            this.props.className,
+            className,
           )
         }
         style={{
           ...this.state.style,
-          ...this.props.style,
+          ...style,
         }}
         ref={this.node}
       >
         <React.Fragment>
-          {this.props.children}
-          {this.props.hasArrow && (<div className="arrow" />)}
+          {children}
+          {hasArrow && (<div className="arrow" />)}
         </React.Fragment>
       </StyledPopover>
     );
