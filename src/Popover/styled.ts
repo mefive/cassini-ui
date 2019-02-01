@@ -1,20 +1,20 @@
-@import "../style/variables";
+import styled from 'styled-components';
 
-.popover {
+const StyledPopover = styled.div`
   top: 0;
   left: 0;
-  z-index: $zindex-dropdown;
-
+  z-index: ${props => props.theme.zindexDropdown};
+  
   &.bs-popover-top,
   &.bs-popover-bottom {
     .arrow {
       left: 50%;
-      margin-left: -0.5 * ($popover-arrow-width);
+      margin-left: calc(-0.5 * ${props => (props.theme.popoverArrowWidth)});
     }
 
     &.left {
       .arrow {
-        left: $border-radius-lg;
+        left: ${props => props.theme.borderRadiusLg};
         margin-left: 0;
       }
     }
@@ -32,12 +32,12 @@
   &.bs-popover-right {
     .arrow {
       top: 50%;
-      margin-top: -0.5 * ($popover-arrow-width);
+      margin-top: calc(-0.5 * ${props => (props.theme.popoverArrowWidth)});
     }
 
     &.top {
       .arrow {
-        top: $border-radius-lg;
+        top: ${props => props.theme.borderRadiusLg};
         margin-top: 0;
       }
     }
@@ -50,4 +50,6 @@
       }
     }
   }
-}
+`;
+
+export default StyledPopover;

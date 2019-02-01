@@ -1,13 +1,21 @@
 import * as React from 'react';
 import { range } from 'lodash';
+import styled from 'styled-components';
 
-import './style/index.scss';
-import Col from '../../src/Grid/Col';
-import Grid from '../../src/Grid/Grid';
-import Row from '../../src/Grid/Row';
-import Container from '../Container';
+import Col from '../src/Grid/Col';
+import Grid from '../src/Grid/Grid';
+import Row from '../src/Grid/Row';
+import Container from './Container';
 
 const GUTTER = 20;
+
+const ColItem = styled.div`
+  background-color: ${props => props.theme.primary};
+  color: white;
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+`;
 
 const TestGrid = () => (
   <Container title="Grid">
@@ -24,12 +32,12 @@ const TestGrid = () => (
             lg={{ span: 3 }}
             xl={{ span: 2 }}
           >
-            <div className="col-item">col</div>
+            <ColItem>col</ColItem>
           </Col>
         ))}
       </Row>
     </Grid>
   </Container>
-)
+);
 
 export default TestGrid;

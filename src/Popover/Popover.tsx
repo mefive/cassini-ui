@@ -2,8 +2,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
 import safeSetState from '../safeSetState';
-
-import './style.scss';
+import StyledPopover from './styled';
 
 export enum Placement {
   TOP = 'top',
@@ -309,7 +308,7 @@ class Popover extends React.Component<Props> {
     const placement = this.state.placement.split('-');
 
     return (
-      <div
+      <StyledPopover
         className={
           classNames(
             'popover',
@@ -328,7 +327,7 @@ class Popover extends React.Component<Props> {
           {this.props.children}
           {this.props.hasArrow && (<div className="arrow" />)}
         </React.Fragment>
-      </div>
+      </StyledPopover>
     );
   }
 }

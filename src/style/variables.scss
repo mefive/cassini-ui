@@ -16,11 +16,7 @@ $spacers: (
   5: 40px,
 );
 
-@import "~bootstrap/scss/functions";
-@import "~bootstrap/scss/variables";
-
 $popover-max-width: none;
-$font-family-base: PingFangSC-Regular $font-family-sans-serif;
 $zindex-context-menu: 1080;
 $zindex-modal-backdrop: 1090;
 $zindex-modal: 1100;

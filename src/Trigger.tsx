@@ -50,9 +50,9 @@ class Trigger extends React.PureComponent<TriggerProps> {
 
   private popover: Popover = null;
 
-  private enterDelayTimer:number = null;
+  private enterDelayTimer:any = null;
 
-  private leaveDelayTimer:number = null;
+  private leaveDelayTimer:any = null;
 
   private anchor:Node = null;
 
