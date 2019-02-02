@@ -17,6 +17,7 @@
   "author": "mefive",
   "license": "ISC",
   "devDependencies": {
+    "@types/decamelize": "^1.2.0",
     "@types/dom-helpers": "^3.4.0",
     "@types/lodash": "^4.14.120",
     "@types/react": "^16.7.22",
@@ -54,6 +55,7 @@
     "bootstrap": "^4.2.1",
     "classnames": "^2.2.6",
     "css-modules-typescript-loader": "^1.1.1",
+    "decamelize": "^2.0.0",
     "dom-helpers": "^3.4.0",
     "lodash": "^4.17.11",
     "polished": "^2.3.3",

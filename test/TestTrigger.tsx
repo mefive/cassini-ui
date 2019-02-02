@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Popover, { Placement } from '../src/Popover';
+import { Animation } from '../src/Animate';
 import Trigger from '../src/Trigger';
 import Container from './Container';
 
@@ -42,8 +43,8 @@ class TestTrigger extends React.PureComponent<Props> {
           <Trigger
             action={Trigger.Action.CLICK}
             popover={popover}
-            enterClassName="fade-in"
-            leaveClassName="fade-out"
+            enterClassName={Animation.SLIDE_DOWN_IN}
+            leaveClassName={Animation.SLIDE_DOWN_OUT}
           >
             <div className="btn btn-lg btn-primary">Click</div>
           </Trigger>
@@ -51,8 +52,9 @@ class TestTrigger extends React.PureComponent<Props> {
           <Trigger
             action={Trigger.Action.HOVER_HOLD}
             popover={popover}
-            enterClassName="slide-down-in"
-            leaveClassName="fade-down-out"
+            enterClassName={Animation.SCALE_IN}
+            leaveClassName={Animation.SCALE_OUT}
+            enterDelay={200}
             leaveDelay={300}
           >
             <div className="btn btn-lg btn-primary ml-2">Hover Hold</div>

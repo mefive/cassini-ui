@@ -3,9 +3,7 @@ import { range } from 'lodash';
 import styled from 'styled-components';
 import { darken } from 'polished';
 
-import Col from '../src/Grid/Col';
-import Grid from '../src/Grid/Grid';
-import Row from '../src/Grid/Row';
+import Grid, { Col, Row } from '../src/Grid';
 import Container from './Container';
 
 const GUTTER = 20;

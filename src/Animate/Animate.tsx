@@ -2,8 +2,28 @@ import * as React from 'react';
 import classNames from 'classnames';
 import { Transition, TransitionGroup } from 'react-transition-group';
 import { EnterHandler } from 'react-transition-group/Transition';
+import StyledAnimate from './styled';
 
-import './style.scss';
+export enum Animation {
+  SLIDE_DOWN_IN = 'slide-down-in',
+  SLIDE_DOWN_OUT = 'slide-down-out',
+  SLIDE_UP_IN = 'slide-up-in',
+  SLIDE_UP_OUT = 'slide-up-out',
+  SLIDE_RIGHT_IN = 'slide-right-in',
+  SLIDE_RIGHT_OUT = 'slide-right-out',
+  SCALE_IN = 'scale-in',
+  SCALE_OUT = 'scale-out',
+  MOVE_UP_IN = 'move-up-in',
+  MOVE_UP_OUT = 'move-up-out',
+  MOVE_DOWN_IN = 'move-down-in',
+  MOVE_DOWN_OUT = 'move-down-out',
+  MOVE_RIGHT_IN = 'move-right-in',
+  MOVE_RIGHT_OUT = 'move-right-out',
+  MOVE_LEFT_IN = 'move-left-in',
+  MOVE_LEFT_OUT = 'move-left-out',
+  FADE_IN = 'fade-in',
+  FADE_OUT = 'fade-out',
+}
 
 export interface AnimateProps {
   enterClassName?: string;
@@ -49,13 +69,21 @@ class Animate extends React.PureComponent<AnimateProps> {
             onEntered={this.props.onEntered}
             unmountOnExit
           >
-            {state => React.cloneElement(child, {
-              className: classNames(child.props.className, 'animation', {
-                [enterClassName]: enterClassName && state === 'entering',
-                [leaveClassName]: leaveClassName && (state === 'exiting' || state === 'exited'),
-                [this.props.activeClass]: state === 'entered',
-              }),
-            })}
+            {state => React.cloneElement(
+              child,
+              null,
+              (
+                <StyledAnimate
+                  className={classNames({
+                    [enterClassName]: enterClassName && state === 'entering',
+                    [leaveClassName]: leaveClassName && (state === 'exiting' || state === 'exited'),
+                    [this.props.activeClass]: state === 'entered',
+                  })}
+                >
+                  {child.props.children}
+                </StyledAnimate>
+              ),
+            )}
           </Transition>
         ))}
       </TransitionGroup>
