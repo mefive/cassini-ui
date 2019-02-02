@@ -1,8 +1,5 @@
 import * as React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
-
-import CustomSelect from '../src/CustomSelect';
+import { range } from 'lodash';
 import Container from './Container';
 import Select, { Option } from '../src/Select';
 
@@ -14,18 +11,15 @@ const persons: Option[] = [{
   title: 'Mark',
 }];
 
-const addr: Option[] = [{
-  value: 'home',
-  title: 'Home',
-}, {
-  value: 'company',
-  title: 'Company',
-}];
+const address: Option[] = range(50).map(index => ({
+  value: index,
+  title: `title+${index}`,
+}));
 
 class TestSelect extends React.PureComponent {
   state = {
     person: 'mefive',
-    addr: 'home',
+    addr: range(10).map(index => index),
   };
 
   render() {
@@ -41,9 +35,12 @@ class TestSelect extends React.PureComponent {
           </div>
 
           <div className="flex-1 ml-2">
-            <CustomSelect>
-              45
-            </CustomSelect>
+            <Select
+              options={address}
+              value={this.state.addr}
+              onChange={addr => this.setState({ addr })}
+              multiple
+            />
           </div>
         </div>
 

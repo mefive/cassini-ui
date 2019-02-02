@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { clearFix } from 'polished';
 import { ellipsis } from '../utils/styled';
 
 export const StyledSelect = styled.div`
@@ -8,21 +7,23 @@ export const StyledSelect = styled.div`
 `;
 
 export const StyledChoiceContainer = styled.div`
-  margin-left: ${props => props.theme.spacers[0]}; 
-  margin-top: ${props => props.theme.spacers[0]};
-  ${clearFix()};
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-left: -${props => props.theme.spacers[0]};
+  margin-top: -${props => props.theme.spacers[0]};
 `;
 
 export const StyledChoice = styled.div`
-  float: left;
   border: 1px solid ${props => props.theme.borderColor};
   background-color: #FAFAFA;
   font-size: ${props => props.theme.fontSizeSm};
   padding: 0 ${props => props.theme.spacers[1]};
   border-radius: ${props => props.theme.borderRadiusSm};
+  position: relative;
+  
   margin-left: ${props => props.theme.spacers[0]};
   margin-top: ${props => props.theme.spacers[0]};
-  position: relative;
   
   & > * {
     vertical-align: middle;

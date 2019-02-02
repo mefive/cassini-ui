@@ -116,7 +116,7 @@ class Select extends React.PureComponent<Props & React.HTMLAttributes<any>> {
 
   onSelect(option: Option) {
     if (this.props.multiple) {
-      const value = this.props.value as Value[];
+      const value = (this.props.value as Value[]).slice();
       const index = value.indexOf(option.value);
 
       if (index === -1) {
@@ -199,7 +199,7 @@ class Select extends React.PureComponent<Props & React.HTMLAttributes<any>> {
     const { optionCache } = this.state;
 
     if (this.props.multiple) {
-      const multipleValue = value as Value[];
+      const multipleValue = Array.isArray(value) ? value as Value[] : [value];
 
       title = (value && multipleValue.length > 0)
         ? (
@@ -282,15 +282,15 @@ class Select extends React.PureComponent<Props & React.HTMLAttributes<any>> {
                   >
                     <div>
                       <StyledOption
-                        className={classNames(
-                          {
-                            active: value === option.value
-                              || (this.props.multiple
-                                && value && (value as Value[]).indexOf(option.value) !== -1)
-                              || (this.state.keyboardNav
-                                && this.state.keyboardNav.value === option.value),
-                          },
-                        )}
+                        className={classNames({
+                          active: value === option.value
+                            || (this.props.multiple
+                              && value && (Array.isArray(value)
+                              ? (value as Value[]).indexOf(option.value) !== -1
+                              : value === option.value))
+                            || (this.state.keyboardNav
+                              && this.state.keyboardNav.value === option.value),
+                        })}
                       >
                         {this.props.renderOption(option)}
                       </StyledOption>

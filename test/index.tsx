@@ -14,10 +14,14 @@ ReactDOM.render(
     <React.Fragment>
       <div className="container pt-1">
         <TestTrigger />
+
         <div className="mt-2" />
-        <TestGrid />
-        <div className="mt-2" />
+
         <TestSelect />
+
+        <div className="mt-2" />
+
+        <TestGrid />
       </div>
     </React.Fragment>
   </ThemeProvider>,

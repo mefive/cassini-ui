@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { CustomSelectContext } from './context';
 
 const StyledCustomSelect = styled.div`
+  height: auto;
   &.custom-indicator {
     background: none;
     padding-right: ${props => props.theme.customSelectPaddingX};
