@@ -40,7 +40,7 @@ interface PlacementStyleInfo {
 }
 
 @safeSetState
-class Popover extends React.Component<Props & React.HTMLAttributes<any>> {
+class Popover extends React.PureComponent<Props & React.HTMLAttributes<any>> {
   static Placement = Placement;
 
   static defaultProps = {

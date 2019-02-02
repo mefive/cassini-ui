@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom';
 import './style/index.scss';
 import { ThemeProvider } from 'styled-components';
 import TestGrid from './TestGrid';
+import TestSelect from './TestSelect';
 import TestTrigger from './TestTrigger';
 
 // eslint-disable-next-line
@@ -15,6 +16,8 @@ ReactDOM.render(
         <TestTrigger />
         <div className="mt-2" />
         <TestGrid />
+        <div className="mt-2" />
+        <TestSelect />
       </div>
     </React.Fragment>
   </ThemeProvider>,
