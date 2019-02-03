@@ -28,6 +28,15 @@ const StyledSwitch = styled.div`
       transition: left .2s;
     }
   }
+  
+  .switch-ball {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    top: 2px;
+    border-radius: 10px;
+    background: ${({ theme }) => theme.white};
+  }
 `;
 
 type Value = boolean;
