@@ -26,11 +26,11 @@ class Input extends React.PureComponent<Props & React.AllHTMLAttributes<any>> {
     append: null,
   };
 
-  private input = React.createRef<HTMLInputElement>();
+  private input: HTMLInputElement = null;
 
   componentDidMount() {
     if (this.props.autoFocus) {
-      this.input.current.focus();
+      this.input.focus();
     }
   }
 
@@ -43,7 +43,7 @@ class Input extends React.PureComponent<Props & React.AllHTMLAttributes<any>> {
         className={classNames('form-control', this.props.className, className)}
         type="text"
         value={this.props.value == null ? '' : this.props.value}
-        ref={this.input}
+        ref={(el) => { this.input = el; }}
         onChange={(e) => {
           let { value } = e.target;
           value = this.props.format(value);

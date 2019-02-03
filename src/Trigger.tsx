@@ -79,7 +79,7 @@ class Trigger extends React.PureComponent<TriggerProps> {
   }
 
   onClick = (e) => {
-    const popover = this.popover && this.popover.node.current;
+    const popover = this.popover && this.popover.node;
 
     if (popover == null || !contains(popover, e.target)) {
       this.setActive(!this.state.active);

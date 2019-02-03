@@ -56,7 +56,7 @@ class Popover extends React.PureComponent<Props & React.HTMLAttributes<any>> {
     placement: this.props.placement,
   };
 
-  public node = React.createRef<HTMLDivElement>();
+  public node: HTMLDivElement = null;
 
   componentDidMount() {
     window.addEventListener('resize', this.onResize);
@@ -68,15 +68,15 @@ class Popover extends React.PureComponent<Props & React.HTMLAttributes<any>> {
 
   onResize = debounce(() => this.place());
 
-  getPlaceStyleInfo(placement:Placement):PlacementStyleInfo {
+  getPlaceStyleInfo(placement: Placement): PlacementStyleInfo {
     const containerRect = this.props.container.getBoundingClientRect();
 
     const anchorRect = this.props.anchor.getBoundingClientRect();
     const anchorHeight = anchorRect.height;
     const anchorWidth = anchorRect.width;
 
-    const popoverHeight = this.node.current.offsetHeight;
-    const popoverWidth = this.node.current.offsetWidth;
+    const popoverHeight = this.node.offsetHeight;
+    const popoverWidth = this.node.offsetWidth;
 
     const betterPlacement = [];
 
@@ -329,7 +329,7 @@ class Popover extends React.PureComponent<Props & React.HTMLAttributes<any>> {
           ...this.state.style,
           ...style,
         }}
-        ref={this.node}
+        ref={(el) => { this.node = el; }}
       >
         <React.Fragment>
           {children}

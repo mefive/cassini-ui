@@ -6,17 +6,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import * as keyCode from 'keycode';
 import { Animation } from '../Animate';
-
+import { Input } from '../Form';
 import Trigger from '../Trigger';
 import Clickable from '../Clickable';
 import Popover, { Placement } from '../Popover';
 import Focusable from '../Focusable';
 import safeSetState from '../safeSetState';
-import Input from '../Input';
 import CustomSelect from '../CustomSelect';
 
 import {
-  StyledPopover, StyledChoice, StyledChoiceContainer, StyledKeyword, StyledOption, StyledSelect,
+  StyledPopover, StyledSelect,
 } from './styled';
 
 type Value = boolean | string | number;
@@ -30,7 +29,7 @@ type OptionMap = {
   [name: string]: Option,
 };
 
-interface Props {
+export interface Props {
   options?: Option[];
   value?: Value[] | Value;
   onChange?: (value: Value | Value[]) => void;
@@ -43,7 +42,7 @@ interface Props {
   showSearch?: boolean;
   onSearch?: Function;
   width?: number;
-  popoverHeight?: number;
+  popover?: JSX.Element;
 }
 
 @safeSetState
@@ -55,7 +54,6 @@ class Select extends React.PureComponent<Props & React.HTMLAttributes<any>> {
     className: null,
     defaultTitle: '请选择',
     popoverClassName: null,
-    popoverHeight: 200,
     renderOption: ({ title }) => title,
     renderTitle: ({ title }) => title,
     multiple: false,
@@ -63,13 +61,14 @@ class Select extends React.PureComponent<Props & React.HTMLAttributes<any>> {
     showSearch: false,
     onSearch: () => {},
     width: null,
+    popover: (<StyledPopover />),
   };
 
   private popover: Popover = null;
 
-  private anchor = React.createRef<CustomSelect>();
+  private anchor:CustomSelect = null;
 
-  private optionsContainer = React.createRef<HTMLDivElement>();
+  private optionsContainer: HTMLDivElement = null;
 
   private popoverScrollTop:number = 0;
 
@@ -82,10 +81,10 @@ class Select extends React.PureComponent<Props & React.HTMLAttributes<any>> {
   };
 
   syncWidth = debounce(() => {
-    const anchor = this.anchor.current;
+    const { anchor } = this;
 
     if (anchor != null) {
-      this.setState({ width: this.anchor.current.node.clientWidth });
+      this.setState({ width: this.anchor.node.clientWidth });
     }
   });
 
@@ -181,7 +180,7 @@ class Select extends React.PureComponent<Props & React.HTMLAttributes<any>> {
   setActive = (active: boolean) => {
     this.setState({ active }, () => {
       if (active) {
-        scrollTop(this.optionsContainer.current, this.popoverScrollTop);
+        scrollTop(this.optionsContainer, this.popoverScrollTop);
         document.addEventListener('keydown', this.onDocumentKeyDown);
       } else {
         document.removeEventListener('keydown', this.onDocumentKeyDown);
@@ -189,7 +188,7 @@ class Select extends React.PureComponent<Props & React.HTMLAttributes<any>> {
     });
 
     if (!active) {
-      this.popoverScrollTop = scrollTop(this.optionsContainer.current);
+      this.popoverScrollTop = scrollTop(this.optionsContainer);
     }
   };
 
@@ -203,9 +202,9 @@ class Select extends React.PureComponent<Props & React.HTMLAttributes<any>> {
 
       title = (value && multipleValue.length > 0)
         ? (
-          <StyledChoiceContainer>
+          <div className="choice-wrapper">
             {multipleValue.map(v => (
-              <StyledChoice key={`${v}`}>
+              <div className="choice" key={`${v}`}>
                 <span>{renderTitle(optionCache[`${v}`] || {})}</span>
 
                 {!this.props.disabled && (
@@ -221,9 +220,9 @@ class Select extends React.PureComponent<Props & React.HTMLAttributes<any>> {
                     <FontAwesomeIcon icon={faTimes} />
                   </Clickable>
                 )}
-              </StyledChoice>
+              </div>
             ))}
-          </StyledChoiceContainer>
+          </div>
         )
         : null;
     } else {
@@ -253,52 +252,54 @@ class Select extends React.PureComponent<Props & React.HTMLAttributes<any>> {
             )}
             ref={(popover) => { this.popover = popover; }}
           >
-            <StyledPopover>
-              {this.props.showSearch && (
-                <StyledKeyword>
-                  <Input
-                    value={this.state.keyword}
-                    onChange={(keyword) => {
-                      this.setState({ keyword });
-                      this.props.onSearch(keyword);
-                    }}
-                    placeholder="请输入关键字"
-                  />
-                </StyledKeyword>
-              )}
+            {React.cloneElement(this.props.popover, null, (
+              <React.Fragment>
+                {this.props.showSearch && (
+                  <div className="keyword">
+                    <Input
+                      value={this.state.keyword}
+                      onChange={(keyword) => {
+                        this.setState({ keyword });
+                        this.props.onSearch(keyword);
+                      }}
+                      placeholder="请输入关键字"
+                    />
+                  </div>
+                )}
 
-              <div
-                style={{
-                  width: this.state.width,
-                  maxHeight: this.props.popoverHeight,
-                  overflow: 'auto',
-                }}
-                ref={this.optionsContainer}
-              >
-                {this.props.options.map(option => (
-                  <Clickable
-                    onClick={() => this.onSelect(option)}
-                    key={`${option.value}`}
-                  >
-                    <div>
-                      <StyledOption
-                        className={classNames({
-                          active: value === option.value
-                            || (this.props.multiple
-                              && value && (Array.isArray(value)
-                              ? (value as Value[]).indexOf(option.value) !== -1
-                              : value === option.value))
-                            || (this.state.keyboardNav
-                              && this.state.keyboardNav.value === option.value),
-                        })}
-                      >
-                        {this.props.renderOption(option)}
-                      </StyledOption>
-                    </div>
-                  </Clickable>
-                ))}
-              </div>
-            </StyledPopover>
+                <div
+                  style={{
+                    width: this.state.width,
+                    overflow: 'auto',
+                  }}
+                  className="options"
+                  ref={(el) => { this.optionsContainer = el; }}
+                >
+                  {this.props.options.map(option => (
+                    <Clickable
+                      onClick={() => this.onSelect(option)}
+                      key={`${option.value}`}
+                    >
+                      <div>
+                        <div
+                          className={classNames('option', {
+                            active: value === option.value
+                              || (this.props.multiple
+                                && value && (Array.isArray(value)
+                                ? (value as Value[]).indexOf(option.value) !== -1
+                                : value === option.value))
+                              || (this.state.keyboardNav
+                                && this.state.keyboardNav.value === option.value),
+                          })}
+                        >
+                          {this.props.renderOption(option)}
+                        </div>
+                      </div>
+                    </Clickable>
+                  ))}
+                </div>
+              </React.Fragment>
+            ))}
           </Popover>
         )}
       >
@@ -307,7 +308,7 @@ class Select extends React.PureComponent<Props & React.HTMLAttributes<any>> {
             <Focusable>
               <CustomSelect
                 active={this.state.active}
-                ref={this.anchor}
+                ref={(el) => { this.anchor = el; }}
                 style={{
                   minWidth: this.props.width,
                 }}

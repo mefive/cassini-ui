@@ -4,72 +4,73 @@ import { ellipsis } from 'polished';
 export const StyledSelect = styled.div`
   ${ellipsis()};
   display: block;
-`;
-
-export const StyledChoiceContainer = styled.div`
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-left: -${props => props.theme.spacers[0]};
-  margin-top: -${props => props.theme.spacers[0]};
-`;
-
-export const StyledChoice = styled.div`
-  border: 1px solid ${props => props.theme.borderColor};
-  background-color: #FAFAFA;
-  font-size: ${props => props.theme.fontSizeSm};
-  padding: 0 ${props => props.theme.spacers[1]};
-  border-radius: ${props => props.theme.borderRadiusSm};
-  position: relative;
   
-  margin-left: ${props => props.theme.spacers[0]};
-  margin-top: ${props => props.theme.spacers[0]};
+  .choice-wrapper {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-left: -${({ theme }) => theme.spacers[0]};
+    margin-top: -${({ theme }) => theme.spacers[0]};
   
-  & > * {
-    vertical-align: middle;
-  }
-  
-  svg {
-    margin-left: ${props => props.theme.spacers[0]};
+    .choice {
+      border: 1px solid ${({ theme }) => theme.borderColor};
+      background-color: #FAFAFA;
+      font-size: ${({ theme }) => theme.fontSizeSm};
+      padding: 0 ${({ theme }) => theme.spacers[1]};
+      border-radius: ${({ theme }) => theme.borderRadiusSm};
+      position: relative;
+      
+      margin-left: ${({ theme }) => theme.spacers[0]};
+      margin-top: ${({ theme }) => theme.spacers[0]};
+      
+      & > * {
+        vertical-align: middle;
+      }
+      
+      svg {
+        margin-left: ${({ theme }) => theme.spacers[0]};
+      } 
+    }  
   }
 `;
 
 export const StyledPopover = styled.div`
-  background-color: ${props => props.theme.white};
-  border: 1px solid ${props => props.theme.gray300};
-  border-radius: ${props => props.theme.borderRadius};
-`;
-
-export const StyledOption = styled.div`
-  padding: 6px 12px;
-  ${ellipsis()};
-  display: block;
-  position: relative;
+  background-color: ${({ theme }) => theme.white};
+  border: 1px solid ${({ theme }) => theme.gray300};
+  border-radius: ${({ theme }) => theme.borderRadius};
+  max-height: 200px;
   
-  cursor: pointer;
-  transition-property: color, background-color;
-  transition-duration: .1s;
-  text-align: left;
-  
-  color: ${props => props.theme.textMuted};
-  
-  &:hover {
-    background-color: ${props => props.theme.primary};
-    color: ${props => props.theme.white};
+  .option {
+    padding: 6px 12px;
+    ${ellipsis()};
+    display: block;
+    position: relative;
+    
+    cursor: pointer;
+    transition-property: color, background-color;
+    transition-duration: .1s;
+    text-align: left;
+    
+    color: ${({ theme }) => theme.textMuted};
+    
+    &:hover {
+      background-color: ${({ theme }) => theme.primary};
+      color: ${({ theme }) => theme.white};
+    }
+    
+    &.active {
+      background-color: #F3F8FF;
+      color: ${({ theme }) => theme.primary};
+    }
+    
+    .icon-check {
+      position: absolute;
+      right: 12px;
+      top: 10px;
+    }
   }
   
-  &.active {
-    background-color: #F3F8FF;
-    color: ${props => props.theme.primary};
+  .keyword {
+    padding: ${({ theme }) => theme.spacers[1]};
   }
-  
-  .icon-check {
-    position: absolute;
-    right: 12px;
-    top: 10px;
-  }
-`;
-
-export const StyledKeyword = styled.div`
-  padding: ${props => props.theme.pacers[1]};
 `;
