@@ -26,10 +26,6 @@ class TestTrigger extends React.PureComponent<Props> {
     name: 'mefive',
   };
 
-  state = {
-    age: 32,
-  };
-
   private popover = React.createRef<Popover>();
 
   componentDidMount(): void {
@@ -38,7 +34,7 @@ class TestTrigger extends React.PureComponent<Props> {
 
   render() {
     return (
-      <Container title="Trigger">
+      <Container title="Trigger & Popover">
         <div className="d-flex justify-content-center">
           <Trigger
             action={Trigger.Action.CLICK}

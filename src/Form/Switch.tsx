@@ -39,19 +39,18 @@ const StyledSwitch = styled.div`
   }
 `;
 
-type Value = boolean;
-
 interface Props {
-  value?: Value;
-  onChange?: (Value) => void;
+  value?: boolean;
+  onChange?: (value: boolean) => void;
   trueText?: string;
   falseText?: string;
   width?: number;
+  disabled?: boolean;
 }
 
-class Switch extends React.PureComponent<Props & React.AllHTMLAttributes<any>> {
+class Switch extends React.PureComponent<Props & React.HTMLAttributes<any>> {
   static defaultProps = {
-    value: null,
+    value: false,
     onChange: () => {},
     trueText: null,
     falseText: null,

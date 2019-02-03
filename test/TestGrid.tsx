@@ -20,7 +20,7 @@ const TestGrid = () => (
   <Container title="Grid">
     <Grid gutter={GUTTER} className="mt-n1">
       <Row gutter={GUTTER}>
-        {range(20).map(i => (
+        {range(10).map(i => (
           <Col
             key={i}
             className="mt-2"
