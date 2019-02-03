@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { ellipsis } from '../utils/styled';
+import { ellipsis } from 'polished';
 
 export const StyledSelect = styled.div`
-  height: auto !important;
   ${ellipsis()};
+  display: block;
 `;
 
 export const StyledChoiceContainer = styled.div`
@@ -43,6 +43,7 @@ export const StyledPopover = styled.div`
 export const StyledOption = styled.div`
   padding: 6px 12px;
   ${ellipsis()};
+  display: block;
   position: relative;
   
   cursor: pointer;

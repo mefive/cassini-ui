@@ -71,7 +71,7 @@
     "ts-transformer-keys": "^0.3.4"
   },
   "lint-staged": {
-    "*.{js,jsx}": [
+    "*.{js,jsx,ts,tsx}": [
       "eslint --fix",
       "git add"
     ]
