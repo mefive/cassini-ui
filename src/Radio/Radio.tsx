@@ -3,10 +3,12 @@ import styled from 'styled-components';
 import { uniqueId, omit } from 'lodash';
 import { keys } from 'ts-transformer-keys';
 
-export interface RadioProps extends React.InputHTMLAttributes<any> {
+type Props = {
   icon: (checked: boolean) => void;
   children?: JSX.Element | string;
-}
+};
+
+export type RadioProps = Props & React.InputHTMLAttributes<any>;
 
 const StyledRadio = styled.div`
   label {
@@ -34,7 +36,7 @@ class Radio extends React.PureComponent<RadioProps> {
 
   render() {
     const { icon } = this.props;
-    const radioKeys = keys<RadioProps>();
+    const radioKeys = keys<Props>();
 
     return (
       <StyledRadio>
