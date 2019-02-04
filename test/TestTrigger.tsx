@@ -28,10 +28,6 @@ class TestTrigger extends React.PureComponent<Props> {
 
   private popover = React.createRef<Popover>();
 
-  componentDidMount(): void {
-    console.log(this.popover.current);
-  }
-
   render() {
     return (
       <Container title="Trigger & Popover">

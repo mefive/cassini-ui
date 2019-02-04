@@ -1,9 +1,14 @@
 import * as React from 'react';
-import { keys } from 'ts-transformer-keys';
-import { uniqueId, omit } from 'lodash';
 import styled from 'styled-components';
+import { uniqueId, omit } from 'lodash';
+import { keys } from 'ts-transformer-keys';
 
-const StyledCheckbox = styled.div`
+export interface RadioProps extends React.InputHTMLAttributes<any> {
+  icon: (checked: boolean) => void;
+  children?: JSX.Element | string;
+}
+
+const StyledRadio = styled.div`
   label {
     margin-bottom: 0;
     display: flex;
@@ -15,14 +20,7 @@ const StyledCheckbox = styled.div`
   }
 `;
 
-type Props = {
-  icon?: (checked: boolean) => JSX.Element;
-  children?: JSX.Element | string;
-};
-
-type CheckboxProps = Props & React.InputHTMLAttributes<any>;
-
-class Checkbox extends React.PureComponent<CheckboxProps> {
+class Radio extends React.PureComponent<RadioProps> {
   static defaultProps = {
     icon: null,
   };
@@ -36,28 +34,27 @@ class Checkbox extends React.PureComponent<CheckboxProps> {
 
   render() {
     const { icon } = this.props;
-
-    const checkboxKeys = keys<Props>();
+    const radioKeys = keys<RadioProps>();
 
     return (
-      <StyledCheckbox>
+      <StyledRadio>
         <label
           htmlFor={this.id}
         >
           {icon != null && icon(this.props.checked)}
 
           <input
-            {...omit(this.props, checkboxKeys)}
-            type="checkbox"
+            {...omit(this.props, radioKeys)}
+            type="radio"
             id={this.id}
             hidden={icon != null}
           />
 
           {this.props.children}
         </label>
-      </StyledCheckbox>
+      </StyledRadio>
     );
   }
 }
 
-export default Checkbox;
+export default Radio;
