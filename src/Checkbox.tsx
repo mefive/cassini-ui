@@ -16,7 +16,7 @@ const StyledCheckbox = styled.div`
 
 interface CheckboxProps extends React.InputHTMLAttributes<any> {
   label?: string;
-  checkbox?: (checked: boolean) => JSX.Element;
+  icon?: (checked: boolean) => JSX.Element;
 }
 
 class Checkbox extends React.PureComponent<CheckboxProps> {
@@ -32,20 +32,20 @@ class Checkbox extends React.PureComponent<CheckboxProps> {
   }
 
   render() {
-    const { checkbox } = this.props;
+    const { icon } = this.props;
 
     return (
       <StyledCheckbox>
         <label
           htmlFor={this.id}
         >
-          {checkbox != null && checkbox(this.props.checked)}
+          {icon != null && icon(this.props.checked)}
 
           <input
             {...this.props}
             type="checkbox"
             id={this.id}
-            hidden={checkbox != null}
+            hidden={icon != null}
           />
 
           {this.props.label}
