@@ -2,7 +2,8 @@ import * as React from 'react';
 import { range } from 'lodash';
 
 import Container from './Container';
-import Select, { Option } from '../src/Select';
+import { Option } from '../src/Select';
+import Select from './styled/Select';
 
 const persons: Option[] = [{
   value: 'mefive',

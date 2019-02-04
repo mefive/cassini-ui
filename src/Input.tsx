@@ -3,19 +3,14 @@ import classNames from 'classnames';
 import { omit } from 'lodash';
 import { keys } from 'ts-transformer-keys';
 
-type Value = string;
-
-interface Props {
-  value: Value;
-  onChange: (value: Value, e: React.ChangeEvent) => void;
-  autoFocus?: boolean;
-  format?: (Value) => Value;
+interface InputProps extends React.InputHTMLAttributes<any> {
+  format?: (string) => string;
   onEnter?: Function;
   prepend?: JSX.Element;
   append?: JSX.Element;
 }
 
-class Input extends React.PureComponent<Props & React.AllHTMLAttributes<any>> {
+class Input extends React.PureComponent<InputProps> {
   static defaultProps = {
     value: null,
     autoFocus: false,
@@ -35,7 +30,7 @@ class Input extends React.PureComponent<Props & React.AllHTMLAttributes<any>> {
   }
 
   renderInput(className?: string): JSX.Element {
-    const props = omit(this.props, keys<Props>());
+    const props = omit(this.props, keys<InputProps>());
 
     return (
       <input
@@ -47,7 +42,8 @@ class Input extends React.PureComponent<Props & React.AllHTMLAttributes<any>> {
         onChange={(e) => {
           let { value } = e.target;
           value = this.props.format(value);
-          this.props.onChange(value, e);
+          e.target.value = value;
+          this.props.onChange(e);
         }}
 
         onKeyPress={(e) => {

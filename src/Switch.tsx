@@ -1,7 +1,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import styled from 'styled-components';
-import Clickable from '../Clickable';
+import Clickable from './Clickable';
 
 const StyledSwitch = styled.div`
   width: 44px;
@@ -15,6 +15,15 @@ const StyledSwitch = styled.div`
   color: ${({ theme }) => theme.white};
   text-align: right;
   user-select: none;
+  
+  .csui-switch-ball {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    top: 2px;
+    border-radius: 10px;
+    background: ${({ theme }) => theme.white};
+  }
 
   &.checked {
     background: ${({ theme }) => theme.primary};
@@ -24,23 +33,15 @@ const StyledSwitch = styled.div`
   &.ready {
     transition: background-color .2s;
 
-    .switch-ball {
+    .csui-switch-ball {
       transition: left .2s;
     }
   }
-  
-  .switch-ball {
-    position: absolute;
-    height: 20px;
-    width: 20px;
-    top: 2px;
-    border-radius: 10px;
-    background: ${({ theme }) => theme.white};
-  }
 `;
 
-interface Props {
+export interface SwitchProps {
   value?: boolean;
+  className?: string;
   onChange?: (value: boolean) => void;
   trueText?: string;
   falseText?: string;
@@ -48,7 +49,7 @@ interface Props {
   disabled?: boolean;
 }
 
-class Switch extends React.PureComponent<Props & React.HTMLAttributes<any>> {
+class Switch extends React.PureComponent<SwitchProps> {
   static defaultProps = {
     value: false,
     onChange: () => {},
@@ -93,7 +94,6 @@ class Switch extends React.PureComponent<Props & React.HTMLAttributes<any>> {
         <StyledSwitch
           className={classNames(
             this.props.className,
-            'switch',
             { ready: this.state.ready },
             { checked: value },
           )}
@@ -101,13 +101,13 @@ class Switch extends React.PureComponent<Props & React.HTMLAttributes<any>> {
           ref={(el) => { this.node = el; }}
         >
           <div
-            className="switch-ball"
+            className="csui-switch-ball"
             style={{
               left: value ? this.state.width - 2 - 20 : 2,
             }}
           />
 
-          <span className="switch-text">
+          <span className="csui-switch-text">
             {value ? trueText : falseText}
           </span>
         </StyledSwitch>

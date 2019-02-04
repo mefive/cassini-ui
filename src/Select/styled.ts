@@ -5,14 +5,14 @@ export const StyledSelect = styled.div`
   ${ellipsis()};
   display: block;
   
-  .choice-wrapper {
+  .csui-select-choice-wrapper {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
     margin-left: -${({ theme }) => theme.spacers[0]};
     margin-top: -${({ theme }) => theme.spacers[0]};
   
-    .choice {
+    .csui-select-choice {
       border: 1px solid ${({ theme }) => theme.borderColor};
       background-color: #FAFAFA;
       font-size: ${({ theme }) => theme.fontSizeSm};
@@ -38,9 +38,13 @@ export const StyledPopover = styled.div`
   background-color: ${({ theme }) => theme.white};
   border: 1px solid ${({ theme }) => theme.gray300};
   border-radius: ${({ theme }) => theme.borderRadius};
-  max-height: 200px;
   
-  .option {
+  .csui-select-options {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  .csui-select-option {
     padding: 6px 12px;
     ${ellipsis()};
     display: block;
@@ -70,7 +74,7 @@ export const StyledPopover = styled.div`
     }
   }
   
-  .keyword {
+  .csui-select-keyword {
     padding: ${({ theme }) => theme.spacers[1]};
   }
 `;

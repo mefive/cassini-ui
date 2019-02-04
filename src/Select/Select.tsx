@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import * as keyCode from 'keycode';
 import { Animation } from '../Animate';
-import { Input } from '../Form';
+import Input from '../Input';
 import Trigger from '../Trigger';
 import Clickable from '../Clickable';
 import Popover, { Placement } from '../Popover';
@@ -29,7 +29,7 @@ type OptionMap = {
   [name: string]: Option,
 };
 
-export interface Props {
+export interface SelectProps {
   options?: Option[];
   value?: Value[] | Value;
   onChange?: (value: Value | Value[]) => void;
@@ -43,10 +43,11 @@ export interface Props {
   onSearch?: Function;
   width?: number;
   popover?: JSX.Element;
+  className?: string;
 }
 
 @safeSetState
-class Select extends React.PureComponent<Props & React.HTMLAttributes<any>> {
+class Select extends React.PureComponent<SelectProps> {
   static defaultProps = {
     options: [],
     value: null,
@@ -202,9 +203,9 @@ class Select extends React.PureComponent<Props & React.HTMLAttributes<any>> {
 
       title = (value && multipleValue.length > 0)
         ? (
-          <div className="choice-wrapper">
+          <div className="csui-select-choice-wrapper">
             {multipleValue.map(v => (
-              <div className="choice" key={`${v}`}>
+              <div className="csui-select-choice" key={`${v}`}>
                 <span>{renderTitle(optionCache[`${v}`] || {})}</span>
 
                 {!this.props.disabled && (
@@ -255,7 +256,7 @@ class Select extends React.PureComponent<Props & React.HTMLAttributes<any>> {
             {React.cloneElement(this.props.popover, null, (
               <React.Fragment>
                 {this.props.showSearch && (
-                  <div className="keyword">
+                  <div className="csui-select-keyword">
                     <Input
                       value={this.state.keyword}
                       onChange={(keyword) => {
@@ -272,7 +273,7 @@ class Select extends React.PureComponent<Props & React.HTMLAttributes<any>> {
                     width: this.state.width,
                     overflow: 'auto',
                   }}
-                  className="options"
+                  className="csui-select-options"
                   ref={(el) => { this.optionsContainer = el; }}
                 >
                   {this.props.options.map(option => (
@@ -282,7 +283,7 @@ class Select extends React.PureComponent<Props & React.HTMLAttributes<any>> {
                     >
                       <div>
                         <div
-                          className={classNames('option', {
+                          className={classNames('csui-select-option', {
                             active: value === option.value
                               || (this.props.multiple
                                 && value && (Array.isArray(value)

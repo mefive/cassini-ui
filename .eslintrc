@@ -24,6 +24,12 @@
     "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".jsx"] }],
     "react/destructuring-assignment": 0,
     "no-unused-vars": "off",
+    "jsx-a11y/label-has-for": [2, {
+      "components": ["Label"],
+      "required": {
+        "every": ["id"],
+      }
+    }],
     "typescript/no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }]
   },
   "env": {

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Container from './Container';
-import { Switch } from '../src/Form';
-
+import Switch from './styled/Switch';
 
 class TestSwitch extends React.PureComponent {
   state = {

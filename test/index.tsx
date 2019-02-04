@@ -6,6 +6,7 @@ import TestGrid from './TestGrid';
 import TestSelect from './TestSelect';
 import TestTrigger from './TestTrigger';
 import TestSwitch from './TestSwitch';
+import TestForm from './TestForm';
 
 // eslint-disable-next-line
 const theme = require('sass-extract-loader?{"plugins":["sass-extract-js"]}!./style/vars.scss');
@@ -23,6 +24,10 @@ ReactDOM.render(
         <div className="mt-2" />
 
         <TestSwitch />
+
+        <div className="mt-2" />
+
+        <TestForm />
 
         <div className="mt-2" />
 
