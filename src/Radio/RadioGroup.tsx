@@ -20,6 +20,14 @@ class RadioGroup extends React.PureComponent<RadioGroupProps> {
     radios: null,
   };
 
+  private onChange:(e: React.ChangeEvent<HTMLInputElement>) => void = (e) => {
+    const { value } = e.target;
+
+    if (value !== this.props.value) {
+      this.props.onChange(value);
+    }
+  };
+
   render() {
     const { radios } = this.props;
 
@@ -31,17 +39,24 @@ class RadioGroup extends React.PureComponent<RadioGroupProps> {
             icon={this.props.icon}
             value={radio.value}
             checked={radio.value === this.props.value}
-            onChange={(e) => {
-              const { value } = e.target;
-
-              if (value !== this.props.value) {
-                this.props.onChange(value);
-              }
-            }}
+            onChange={this.onChange}
           >
             {radio.title}
           </Radio>
         ))}
+
+        {React.Children.map(this.props.children, (child: JSX.Element) => {
+          if (child.type === Radio) {
+            return React.cloneElement(
+              child, {
+                checked: child.props.value === this.props.value,
+                onChange: this.onChange,
+              },
+            );
+          }
+
+          return null;
+        })}
       </div>
     );
   }

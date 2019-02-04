@@ -4,7 +4,18 @@ import { faCheckSquare, faSquare } from '@fortawesome/free-solid-svg-icons';
 import Container from './Container';
 import Input from '../src/Input';
 import Checkbox from '../src/Checkbox';
-import { RadioGroup } from '../src/Radio';
+import Radio, { RadioGroup } from '../src/Radio';
+
+const radios = [{
+  value: 'red',
+  title: 'Red',
+}, {
+  value: 'white',
+  title: 'White',
+}, {
+  value: 'black',
+  title: 'Black',
+}];
 
 class TestForm extends React.PureComponent {
   state = {
@@ -42,19 +53,18 @@ class TestForm extends React.PureComponent {
         <div className="d-flex align-items-center mt-2">
           <div className="flex-1">
             <RadioGroup
-              radios={[{
-                value: 'red',
-                title: 'Red',
-              }, {
-                value: 'white',
-                title: 'White',
-              }, {
-                value: 'black',
-                title: 'Black',
-              }]}
               value={this.state.color}
               onChange={color => this.setState({ color })}
-            />
+            >
+              {radios.map(radio => (
+                <Radio
+                  key={radio.value}
+                  value={radio.value}
+                >
+                  {radio.title}
+                </Radio>
+              ))}
+            </RadioGroup>
           </div>
         </div>
       </Container>
