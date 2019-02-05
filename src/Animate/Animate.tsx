@@ -23,6 +23,8 @@ export enum Animation {
   MOVE_LEFT_OUT = 'move-left-out',
   FADE_IN = 'fade-in',
   FADE_OUT = 'fade-out',
+  FADE_IN_HALF = 'fade-in-half',
+  FADE_OUT_HALF = 'fade-out-half',
 }
 
 export interface AnimateProps {

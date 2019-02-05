@@ -30,6 +30,8 @@ const Animation = styled.div`
   ${animationName('moveLeftOut')}
   ${animationName('fadeIn')}
   ${animationName('fadeOut')}
+  ${animationName('fadeInHalf')}
+  ${animationName('fadeOutHalf')}
   
   & > * {
     animation-duration: 0.2s;
@@ -260,6 +262,24 @@ const Animation = styled.div`
     }
     100% {
       opacity: 0;
+    }
+  }
+  
+  @keyframes fadeInHalf {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: .5;
+    }
+  }
+
+  @keyframes fadeOutHalf {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: .5;
     }
   }
 `;
