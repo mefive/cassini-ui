@@ -9,7 +9,7 @@ interface AlertProps extends DialogProps {
 
 class Alert extends React.PureComponent<AlertProps> {
   static defaultProps = {
-    confirmText: 'Confirm',
+    okText: 'Ok',
   };
 
   render() {

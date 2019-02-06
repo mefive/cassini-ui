@@ -68,7 +68,9 @@ class Modal extends React.PureComponent<ModalProps, any> {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.visible && !this.props.visible) {
-      window.blur();
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
       document.addEventListener('keydown', this.onKeyPress);
     } else if (!nextProps.visible && this.props.visible) {
       document.removeEventListener('keydown', this.onKeyPress);
