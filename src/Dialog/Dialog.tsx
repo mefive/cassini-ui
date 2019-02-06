@@ -15,8 +15,10 @@ export function DialogBody(props: JSX.ElementChildrenAttribute) {
 
 export function DialogFooter(props: JSX.ElementChildrenAttribute) {
   return (
-    <div className="modal-footer">
-      {props.children}
+    <div>
+      <div className="modal-footer">
+        {props.children}
+      </div>
     </div>
   );
 }

@@ -2,6 +2,18 @@ import * as React from 'react';
 
 function safeSetState(WrappedComponent: React.ComponentClass<any, any>): any {
   class SafeSetState extends WrappedComponent {
+    componentDidMount(): void {}
+
+    componentDidCatch(): void {}
+
+    componentDidUpdate(): void {}
+
+    componentWillReceiveProps(): void {}
+
+    componentWillMount(): void {}
+
+    componentWillUpdate(): void {}
+
     componentWillUnmount() {
       this.child.setState = () => { };
     }

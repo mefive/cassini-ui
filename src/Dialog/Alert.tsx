@@ -4,7 +4,7 @@ import Dialog, { DialogBody, DialogFooter, DialogProps } from './Dialog';
 import Clickable from '../Clickable';
 
 interface AlertProps extends DialogProps {
-  confirmText?: string;
+  okText?: string;
 }
 
 class Alert extends React.PureComponent<AlertProps> {
@@ -24,7 +24,7 @@ class Alert extends React.PureComponent<AlertProps> {
         <DialogFooter>
           <Clickable onClick={this.props.onClose}>
             <div className="btn btn-primary">
-              {this.props.confirmText}
+              {this.props.okText}
             </div>
           </Clickable>
         </DialogFooter>

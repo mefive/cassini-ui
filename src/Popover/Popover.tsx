@@ -1,6 +1,6 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import { debounce, omit } from 'lodash';
+import { omit } from 'lodash';
 import { keys } from 'ts-transformer-keys';
 import safeSetState from '../safeSetState';
 import StyledPopover from './styled';
@@ -59,14 +59,12 @@ class Popover extends React.PureComponent<Props & React.HTMLAttributes<any>> {
   public node: HTMLDivElement = null;
 
   componentDidMount() {
-    window.addEventListener('resize', this.onResize);
+    window.addEventListener('resize', this.place);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('resize', this.place);
   }
-
-  onResize = debounce(() => this.place());
 
   getPlaceStyleInfo(placement: Placement): PlacementStyleInfo {
     const containerRect = this.props.container.getBoundingClientRect();
