@@ -1,0 +1,36 @@
+import * as React from 'react';
+// eslint-disable-next-line typescript/no-unused-vars
+import Dialog, { DialogBody, DialogFooter, DialogProps } from './Dialog';
+import Clickable from '../Clickable';
+
+interface AlertProps extends DialogProps {
+  confirmText?: string;
+}
+
+class Alert extends React.PureComponent<AlertProps> {
+  static defaultProps = {
+    confirmText: 'Confirm',
+  };
+
+  render() {
+    return (
+      <Dialog
+        {...this.props}
+      >
+        <DialogBody>
+          {this.props.children}
+        </DialogBody>
+
+        <DialogFooter>
+          <Clickable onClick={this.props.onClose}>
+            <div className="btn btn-primary">
+              {this.props.confirmText}
+            </div>
+          </Clickable>
+        </DialogFooter>
+      </Dialog>
+    );
+  }
+}
+
+export default Alert;

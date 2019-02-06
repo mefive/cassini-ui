@@ -276,10 +276,10 @@ const Animation = styled.div`
 
   @keyframes fadeOutHalf {
     0% {
-      opacity: 1;
+      opacity: .5;
     }
     100% {
-      opacity: .5;
+      opacity: 0;
     }
   }
 `;

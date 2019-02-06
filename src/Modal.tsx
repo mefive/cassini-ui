@@ -11,23 +11,24 @@ import Portal from './Portal';
 import Animate, { Animation } from './Animate';
 import Clickable from './Clickable';
 
-const StyledModalContainer = styled.div`
+export const StyledModalContainer = styled.div`
   display: block;
   animation-duration: 0.3s;
 `;
 
-const StyledModalDialog = styled.div`
+export const StyledModalDialog = styled.div`
   left: 50%;
   top: 50%;
 `;
 
-interface ModalProps {
+export interface ModalProps {
   title?: string,
   onClose?: (Event) => void,
   onEnter?: Function,
   visible?: boolean,
   width?: string | number,
   className?: string;
+  dialog?: JSX.Element;
 }
 
 class Modal extends React.PureComponent<ModalProps, any> {
@@ -37,11 +38,14 @@ class Modal extends React.PureComponent<ModalProps, any> {
     onEnter: () => {},
     visible: false,
     width: 480,
+    dialog: <StyledModalDialog />,
   };
 
   private dialog: HTMLDivElement = null;
 
   private dialogHeader: HTMLDivElement = null;
+
+  public dialogWrapper: HTMLDivElement = null;
 
   public resize = debounce(() => {
     const { dialogHeader } = this;
@@ -116,9 +120,9 @@ class Modal extends React.PureComponent<ModalProps, any> {
       <React.Fragment>
         <Animate
           enterClassName={Animation.FADE_IN_HALF}
-          enterDuration={300}
+          enterDuration={200}
           leaveClassName={Animation.FADE_OUT_HALF}
-          leaveDuration={300}
+          leaveDuration={200}
         >
           {this.props.visible && (
             <Portal>
@@ -130,10 +134,10 @@ class Modal extends React.PureComponent<ModalProps, any> {
         </Animate>
 
         <Animate
-          enterClassName="scale-in"
-          enterDuration={300}
-          leaveClassName="scale-out"
-          leaveDuration={300}
+          enterClassName={Animation.SCALE_IN}
+          enterDuration={200}
+          leaveClassName={Animation.SCALE_OUT}
+          leaveDuration={200}
         >
           {this.props.visible && (
             <Portal>
@@ -143,15 +147,15 @@ class Modal extends React.PureComponent<ModalProps, any> {
                   this.props.className,
                 )}
               >
-                <StyledModalDialog
-                  className="modal-dialog"
-                  ref={(el) => { this.dialog = el; }}
-                  style={{
+                {React.cloneElement(this.props.dialog, {
+                  className: 'modal-dialog',
+                  ref: (el) => { this.dialog = el; },
+                  style: {
                     marginLeft: this.state.marginLeft,
                     marginTop: this.state.marginTop,
                     minWidth: this.props.width,
-                  }}
-                >
+                  },
+                }, (
                   <div className="modal-content">
                     <div className="modal-header" ref={(el) => { this.dialogHeader = el; }}>
                       <h5 className="modal-title">{this.props.title}</h5>
@@ -165,15 +169,17 @@ class Modal extends React.PureComponent<ModalProps, any> {
                     </div>
 
                     <div
+                      className="modal-body-wrapper"
                       style={{
                         maxHeight: this.state.bodyMaxHeight,
                         overflowY: 'auto',
                       }}
+                      ref={(el) => { this.dialogWrapper = el; }}
                     >
                       {this.props.children}
                     </div>
                   </div>
-                </StyledModalDialog>
+                ))}
               </StyledModalContainer>
             </Portal>
           )}
