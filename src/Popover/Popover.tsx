@@ -203,7 +203,7 @@ class Popover extends React.PureComponent<Props & React.HTMLAttributes<any>> {
       }
 
       case Placement.BOTTOM: {
-        if (top + popoverHeight > containerRect.bottom) {
+        if (top + popoverHeight > containerRect.height) {
           betterPlacement[0] = Placement.TOP;
         }
         break;
@@ -217,7 +217,7 @@ class Popover extends React.PureComponent<Props & React.HTMLAttributes<any>> {
       }
 
       case Placement.RIGHT: {
-        if (left + popoverWidth > containerRect.right) {
+        if (left + popoverWidth > containerRect.width) {
           betterPlacement[0] = Placement.LEFT;
         }
         break;
@@ -229,7 +229,7 @@ class Popover extends React.PureComponent<Props & React.HTMLAttributes<any>> {
 
     switch (placements[1]) {
       case Placement.LEFT: {
-        if (left + popoverWidth > containerRect.right) {
+        if (left + popoverWidth > containerRect.width) {
           betterPlacement[1] = Placement.RIGHT;
         }
         break;
@@ -243,7 +243,7 @@ class Popover extends React.PureComponent<Props & React.HTMLAttributes<any>> {
       }
 
       case Placement.TOP: {
-        if (top + popoverHeight > containerRect.bottom) {
+        if (top + popoverHeight > containerRect.height) {
           betterPlacement[1] = Placement.BOTTOM;
         }
         break;
