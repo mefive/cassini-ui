@@ -41,8 +41,6 @@ interface PlacementStyleInfo {
 
 @safeSetState
 class Popover extends React.PureComponent<Props & React.HTMLAttributes<any>> {
-  static Placement = Placement;
-
   static defaultProps = {
     container: null,
     anchor: null,
@@ -196,28 +194,28 @@ class Popover extends React.PureComponent<Props & React.HTMLAttributes<any>> {
     // build a better placement, avoid overflowing of the container's edge
     switch (placements[0]) {
       case Placement.TOP: {
-        if (top < containerRect.top) {
+        if ((top + marginTop) < containerRect.top) {
           betterPlacement[0] = Placement.BOTTOM;
         }
         break;
       }
 
       case Placement.BOTTOM: {
-        if (top + popoverHeight > containerRect.height) {
+        if ((top + popoverHeight + marginTop) > containerRect.height) {
           betterPlacement[0] = Placement.TOP;
         }
         break;
       }
 
       case Placement.LEFT: {
-        if (left < containerRect.left) {
+        if ((left + marginLeft) < containerRect.left) {
           betterPlacement[0] = Placement.RIGHT;
         }
         break;
       }
 
       case Placement.RIGHT: {
-        if (left + popoverWidth > containerRect.width) {
+        if (left + popoverWidth + marginLeft > containerRect.width) {
           betterPlacement[0] = Placement.LEFT;
         }
         break;
