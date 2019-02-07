@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckSquare, faSquare } from '@fortawesome/free-solid-svg-icons';
-import Container from './Container';
-import Input from '../src/Input';
-import Checkbox from '../src/Checkbox';
-import Radio, { RadioGroup } from '../src/Radio';
+import Container from '../Container';
+import Input from '../../src/Input';
+import Checkbox from '../../src/Checkbox';
+import Radio, { RadioGroup } from '../../src/Radio';
 
 const radios = [{
   value: 'red',
@@ -17,7 +17,7 @@ const radios = [{
   title: 'Black',
 }];
 
-class TestForm extends React.PureComponent {
+class TheForm extends React.PureComponent {
   state = {
     name: 'mefive',
     remembered: false,
@@ -72,4 +72,4 @@ class TestForm extends React.PureComponent {
   }
 }
 
-export default TestForm;
+export default TheForm;

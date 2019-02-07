@@ -7,7 +7,7 @@ type Layout = {
   offset? :number,
 };
 
-type ColProps = {
+export type ColProps = {
   xs?: number | Layout;
   sm?: number | Layout;
   md?: number | Layout;

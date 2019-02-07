@@ -6,7 +6,7 @@ import TestGrid from './TestGrid';
 import TestSelect from './TestSelect';
 import TestTrigger from './TestTrigger';
 import TestSwitch from './TestSwitch';
-import TestForm from './TestForm';
+import TheForm from './TestForm';
 import TestModal from './TestModal';
 import TestDialog from './TestDialog';
 import TestTooltip from './TestTooltip';
@@ -30,7 +30,7 @@ ReactDOM.render(
 
         <div className="mt-2" />
 
-        <TestForm />
+        <TheForm />
 
         <div className="mt-2" />
 
