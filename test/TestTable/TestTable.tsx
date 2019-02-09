@@ -15,6 +15,7 @@ class TestTable extends React.PureComponent {
   state = {
     loading: false,
     page: null,
+    height: null,
   };
 
   render() {
@@ -40,8 +41,21 @@ class TestTable extends React.PureComponent {
               }
             }}
           />
+
+          <div className="ml-2">Fixed height</div>
+          <Switch
+            className="ml-1"
+            value={this.state.height != null}
+            onChange={() => {
+              if (this.state.height == null) {
+                this.setState({ height: 300 });
+              } else {
+                this.setState({ height: null });
+              }
+            }}
+          />
         </div>
-        <div style={{ height: null }}>
+        <div style={{ height: this.state.height }}>
           <Table
             columns={this.columns}
             dataSource={dailyBasicDataSource}
@@ -54,6 +68,7 @@ class TestTable extends React.PureComponent {
               },
               rowsPerPage: 10,
             }}
+            height={this.state.height == null ? null : 'flex'}
           />
         </div>
       </Container>
