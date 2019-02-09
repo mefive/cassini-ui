@@ -10,18 +10,19 @@ import TableHeader from './TableHeader';
 import TableBody from './TableBody';
 import Pagination from '../Pagination';
 import { Column } from './index';
+import StyledTable from './styled';
 
 export interface TableProps {
   className?: string;
   caption?: string;
   columns?: Column[];
-  renderColumn: (col: Column) => JSX.Element;
+  renderColumn?: (col: Column) => JSX.Element;
   dataSource?: object[];
   rowKey?: string;
   pagination?: {
     page?: number;
     enablePagination?: boolean;
-    onPageChange: (page: number) => void;
+    onChange: (page: number) => void;
     totalPages?: number;
     rowsPerPage?: number;
   };
@@ -34,7 +35,6 @@ class Table extends React.PureComponent<TableProps> {
   static defaultProps = {
     caption: null,
     className: null,
-    renderColumn: ({ title }) => title,
     columns: [],
     dataSource: null,
     rowKey: null,
@@ -179,10 +179,9 @@ class Table extends React.PureComponent<TableProps> {
     const noData = !loading && dataSource.length === 0;
 
     return (
-      <div
+      <StyledTable
         className={classNames(
           this.props.className,
-          'table-container',
           { loading },
           { 'no-data': noData },
           { 'fixed-header': height != null },
@@ -305,7 +304,7 @@ class Table extends React.PureComponent<TableProps> {
             total={(this.props.dataSource || []).length}
           />
         )}
-      </div>
+      </StyledTable>
     );
   }
 }

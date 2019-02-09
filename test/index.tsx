@@ -10,6 +10,7 @@ import TheForm from './TestForm';
 import TestModal from './TestModal';
 import TestDialog from './TestDialog';
 import TestTooltip from './TestTooltip';
+import TestTable from './TestTable/TestTable';
 
 // eslint-disable-next-line
 const theme = require('sass-extract-loader?{"plugins":["sass-extract-js"]}!./style/vars.scss');
@@ -43,6 +44,10 @@ ReactDOM.render(
         <div className="mt-2" />
 
         <TestTooltip />
+
+        <div className="mt-2" />
+
+        <TestTable />
 
         <div className="mt-2" />
 

@@ -91,7 +91,7 @@ class TableHeader extends React.PureComponent<TableHeaderProps> {
                     { [`text-${col.align}`]: col.align },
                   )}
                 >
-                  {this.props.renderColumn(col, colIndex)}
+                  {this.props.renderColumn ? this.props.renderColumn(col, colIndex) : col.title}
                 </th>
               ))}
             </tr>
