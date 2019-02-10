@@ -11,6 +11,7 @@ import TestModal from './TestModal';
 import TestDialog from './TestDialog';
 import TestTooltip from './TestTooltip';
 import TestTable from './TestTable/TestTable';
+import TestCalendar from './TestCalendar';
 
 // eslint-disable-next-line
 const theme = require('sass-extract-loader?{"plugins":["sass-extract-js"]}!./style/vars.scss');
@@ -19,6 +20,10 @@ ReactDOM.render(
   <ThemeProvider theme={theme}>
     <React.Fragment>
       <div className="container pt-1">
+        <TestCalendar />
+
+        <div className="mt-2" />
+
         <TestTrigger />
 
         <div className="mt-2" />
