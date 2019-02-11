@@ -1,39 +1,37 @@
-import styled from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
 import * as decamelize from 'decamelize';
 
 function animationName(name) {
   return `
     &.${decamelize(name, '-')} {
-      & > * {
-        animation-name: ${name};
-      }
+      animation-name: ${name};
     }
   `;
 }
 
-const Animation = styled.div`
-  ${animationName('slideDownIn')}
-  ${animationName('slideDownOut')}
-  ${animationName('slideUpIn')}
-  ${animationName('slideUpOut')}
-  ${animationName('slideRightIn')}
-  ${animationName('slideRightOut')}
-  ${animationName('scaleIn')}
-  ${animationName('scaleOut')}
-  ${animationName('moveUpIn')}
-  ${animationName('moveUpOut')}
-  ${animationName('moveDownIn')}
-  ${animationName('moveDownOut')}
-  ${animationName('moveRightIn')}
-  ${animationName('moveRightOut')}
-  ${animationName('moveLeftIn')}
-  ${animationName('moveLeftOut')}
-  ${animationName('fadeIn')}
-  ${animationName('fadeOut')}
-  ${animationName('fadeInHalf')}
-  ${animationName('fadeOutHalf')}
-  
-  & > * {
+const Animation = createGlobalStyle`
+  .animation {
+    ${animationName('slideDownIn')}
+    ${animationName('slideDownOut')}
+    ${animationName('slideUpIn')}
+    ${animationName('slideUpOut')}
+    ${animationName('slideRightIn')}
+    ${animationName('slideRightOut')}
+    ${animationName('scaleIn')}
+    ${animationName('scaleOut')}
+    ${animationName('moveUpIn')}
+    ${animationName('moveUpOut')}
+    ${animationName('moveDownIn')}
+    ${animationName('moveDownOut')}
+    ${animationName('moveRightIn')}
+    ${animationName('moveRightOut')}
+    ${animationName('moveLeftIn')}
+    ${animationName('moveLeftOut')}
+    ${animationName('fadeIn')}
+    ${animationName('fadeOut')}
+    ${animationName('fadeInHalf')}
+    ${animationName('fadeOutHalf')}
+    
     animation-duration: 0.2s;
     animation-fill-mode: forwards; 
   }

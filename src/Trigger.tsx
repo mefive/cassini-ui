@@ -181,7 +181,7 @@ class Trigger extends React.PureComponent<TriggerProps> {
           <Portal
             onContainerChange={popoverContainer => this.setState(
               { popoverContainer },
-              () => this.popover.place(),
+              () => this.popover && this.popover.place(),
             )}
           >
             {(() => {

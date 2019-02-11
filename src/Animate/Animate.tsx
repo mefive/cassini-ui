@@ -57,38 +57,37 @@ class Animate extends React.PureComponent<AnimateProps> {
     } = this.props;
 
     return (
-      <TransitionGroup>
-        {this.props.children && React.Children.map(this.props.children, (child: JSX.Element) => (
-          <Transition
-            key={child.key || 'single'}
-            in
-            timeout={{
-              enter: enterClassName ? enterDuration : 0,
-              exit: leaveClassName ? leaveDuration : 0,
-            }}
-            onEnter={this.props.onEnter}
-            onEntering={this.props.onEntering}
-            onEntered={this.props.onEntered}
-            unmountOnExit
-          >
-            {state => React.cloneElement(
-              child,
-              null,
-              (
-                <StyledAnimate
-                  className={classNames({
+      <React.Fragment>
+        <StyledAnimate />
+
+        <TransitionGroup>
+          {this.props.children && React.Children.map(this.props.children, (child: JSX.Element) => (
+            <Transition
+              key={child.key || 'single'}
+              in
+              timeout={{
+                enter: enterClassName ? enterDuration : 0,
+                exit: leaveClassName ? leaveDuration : 0,
+              }}
+              onEnter={this.props.onEnter}
+              onEntering={this.props.onEntering}
+              onEntered={this.props.onEntered}
+              unmountOnExit
+            >
+              {state => React.cloneElement(
+                child,
+                {
+                  className: classNames('animation', {
                     [enterClassName]: enterClassName && state === 'entering',
                     [leaveClassName]: leaveClassName && (state === 'exiting' || state === 'exited'),
                     [this.props.activeClass]: state === 'entered',
-                  })}
-                >
-                  {child.props.children}
-                </StyledAnimate>
-              ),
-            )}
-          </Transition>
-        ))}
-      </TransitionGroup>
+                  }),
+                },
+              )}
+            </Transition>
+          ))}
+        </TransitionGroup>
+      </React.Fragment>
     );
   }
 }
