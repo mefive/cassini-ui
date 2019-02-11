@@ -2,10 +2,6 @@ import * as React from 'react';
 import classNames from 'classnames';
 
 class Form extends React.PureComponent<React.FormHTMLAttributes<any>> {
-  static defaultProps = {
-    onSubmit: () => {},
-  };
-
   render() {
     return (
       <form
@@ -15,7 +11,9 @@ class Form extends React.PureComponent<React.FormHTMLAttributes<any>> {
         )}
         onSubmit={(e) => {
           e.preventDefault();
-          this.props.onSubmit(e);
+          if (this.props.onSubmit) {
+            this.props.onSubmit(e);
+          }
         }}
       >
         <div>

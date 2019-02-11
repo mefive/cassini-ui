@@ -7,10 +7,12 @@ import Checkbox from '../Checkbox';
 export { default } from './Form';
 export { default as FormItem } from './FormItem';
 
-interface WithFormProps {
+export interface WithFormProps {
   dataSource?: object;
   onChange?: (key: string, value: any) => void;
   onSubmit?: () => void;
+  isSubmitting?: boolean;
+  isDirty?: boolean;
 }
 
 type Rule = {
@@ -27,7 +29,7 @@ type FieldOption = {
 };
 
 export interface FormProps extends WithFormProps {
-  validate?: (fields: string | string[]) => void;
+  validate?: (fields?: string | string[]) => boolean;
   getFieldDecorator?: (name: string, options?: FieldOption) => (Item: JSX.Element) => JSX.Element;
   errors?: { [s: string]: string; };
   clearError?: Function;
@@ -60,7 +62,6 @@ export const withForm = (WrappedComponent) => {
     static defaultProps = {
       dataSource: {},
       onChange: () => {},
-      onSubmit: () => {},
     };
 
     private rules: Map<string, Rule[]> = new Map();
