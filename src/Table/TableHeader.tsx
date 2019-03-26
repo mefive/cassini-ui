@@ -1,7 +1,7 @@
 import * as React from 'react';
 import groupBy from 'lodash-es/groupBy';
 import classNames from 'classnames';
-import * as memoize from 'memoize-one';
+import memoize from 'memoize-one';
 import { Column } from './index';
 
 export interface TableHeaderProps<T = any> {

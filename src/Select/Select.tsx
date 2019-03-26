@@ -207,7 +207,8 @@ class Select extends React.PureComponent<SelectProps> {
                 <div>{renderTitle(optionCache[`${v}`] || {})}</div>
 
                 {!this.props.disabled && (
-                  <Clickable
+                  <SvgTimes
+                    style={{ width: 10 }}
                     onClick={(e) => {
                       e.stopPropagation();
                       const newValue = [...multipleValue];
@@ -215,9 +216,7 @@ class Select extends React.PureComponent<SelectProps> {
 
                       this.props.onChange(newValue);
                     }}
-                  >
-                    <SvgTimes style={{ width: 10 }} />
-                  </Clickable>
+                  />
                 )}
               </div>
             ))}

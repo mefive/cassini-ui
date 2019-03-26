@@ -1,13 +1,13 @@
 import * as React from 'react';
 import Form, {
-  FormItem, FormProps, withForm, WithFormProps,
+  FormItem, withForm, WithFormProps,
 } from '../../src/Form';
 import { ColProps } from '../../src/Grid';
 import Input from '../../src/Input';
 import Checkbox from '../../src/Checkbox';
 import Radio, { RadioGroup } from '../../src/Radio';
 import { User } from './index';
-import SvgCheckSquare from './TheForm';
+import SvgCheckSquare from '../../src/icons/solid/CheckSquare';
 import SvgSquare from '../../src/icons/solid/Square';
 
 const labelCol: ColProps = {
@@ -54,8 +54,8 @@ class UserForm extends React.PureComponent<UserFormProps> {
               icon={checked => (
                 <div className="mr-0">
                   {checked
-                    ? (<SvgCheckSquare />)
-                    : (<SvgSquare />)
+                    ? (<SvgCheckSquare style={{ width: 12 }} />)
+                    : (<SvgSquare style={{ width: 12 }} />)
                   }
                 </div>
               )}

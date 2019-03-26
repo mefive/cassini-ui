@@ -42,8 +42,8 @@ class TheForm extends React.PureComponent {
               icon={checked => (
                 <div className="mr-0">
                   {checked
-                    ? (<SvgCheckSquare />)
-                    : (<SvgSquare />)
+                    ? (<SvgCheckSquare style={{ width: 12 }} />)
+                    : (<SvgSquare style={{ width: 12 }} />)
                   }
                 </div>
               )}
