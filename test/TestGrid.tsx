@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { range } from 'lodash';
+import range from 'lodash-es/range';
 import styled from 'styled-components';
 import { darken } from 'polished';
 

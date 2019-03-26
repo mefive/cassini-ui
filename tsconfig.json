@@ -6,6 +6,6 @@
     "lib": ["es2016", "dom"],
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "sourceMap": true
+    "sourceMap": false
   }
 }

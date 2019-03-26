@@ -1,7 +1,10 @@
 const path = require('path');
+const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const keysTransformer = require('ts-transformer-keys/transformer').default;
+const LodashWebpackPlugin = require('lodash-webpack-plugin');
 
 module.exports = {
   context: path.resolve(__dirname, './test'),
@@ -33,7 +36,7 @@ module.exports = {
       {
         test: /\.scss$/,
         loader: [
-          'style-loader',
+          MiniCssExtractPlugin.loader,
           'css-loader',
           'sass-loader',
         ],
@@ -51,6 +54,17 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'index.html',
       filename: 'index.html',
+    }),
+
+    new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /zh-cn/),
+
+    new LodashWebpackPlugin({
+      shorthands: true,
+    }),
+
+    new MiniCssExtractPlugin({
+      filename: '/css/[name].[hash:7].css',
+      chunkFilename: '[id].css',
     }),
   ],
 

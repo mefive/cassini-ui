@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { range } from 'lodash';
+import range from 'lodash-es/range';
 import Container from './Container';
 import Clickable from '../src/Clickable';
 import Dialog, {
