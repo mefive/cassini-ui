@@ -1,24 +1,24 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import { isFunction } from 'lodash';
+import isFunction from 'lodash-es/isFunction';
 import { flattenWith } from '../utils/array';
 import { Column } from './index';
 
-export interface TableBodyProps {
-  columns: Column[];
-  dataSource: object[];
-  rowKey: string;
+export interface TableBodyProps<T> {
+  columns: Column<T>[];
+  dataSource: T[];
+  rowKey: keyof T;
   noWrap?: boolean;
 }
 
-class TableBody extends React.PureComponent<TableBodyProps> {
+class TableBody<T = any> extends React.PureComponent<TableBodyProps<T>> {
   static defaultProps = {
     dataSource: null,
     rowKey: null,
     noWrap: false,
   };
 
-  getLeafColumns(): Column[] {
+  getLeafColumns(): Column<T>[] {
     const { columns } = this.props;
 
     const flattenColumns = flattenWith(columns, (col, parentCol, level) => ({
@@ -29,9 +29,13 @@ class TableBody extends React.PureComponent<TableBodyProps> {
     return flattenColumns.filter(col => col.children == null);
   }
 
-  renderCell(col: Column, row: object, rowIndex: number): JSX.Element {
+  private static getKey(col: Column): string {
+    return col.key || `${col.id}`;
+  }
+
+  renderCell(col: Column<T>, row: T, rowIndex: number): JSX.Element {
     const cell = col.render == null
-      ? row[col.key]
+      ? row[TableBody.getKey(col)]
       : col.render(row, rowIndex);
 
     if (col.wrapper != null) {
@@ -46,7 +50,7 @@ class TableBody extends React.PureComponent<TableBodyProps> {
 
     return (
       <td
-        key={col.key}
+        key={TableBody.getKey(col)}
         className={classNames(
           { 'text-nowrap': this.props.noWrap || col.noWrap },
           { [`text-${col.align}`]: col.align },
@@ -68,7 +72,7 @@ class TableBody extends React.PureComponent<TableBodyProps> {
     return (
       <tbody>
         {dataSource.map((row, index) => (
-          <tr key={rowKey === null ? index : row[rowKey]}>
+          <tr key={`${rowKey === null ? index : row[rowKey]}`}>
             {columns.map(col => this.renderCell(col, row, index))}
           </tr>
         ))}

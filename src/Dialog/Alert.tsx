@@ -1,5 +1,4 @@
 import * as React from 'react';
-// eslint-disable-next-line typescript/no-unused-vars
 import Dialog, { DialogBody, DialogFooter, DialogProps } from './Dialog';
 import Clickable from '../Clickable';
 
@@ -23,7 +22,7 @@ class Alert extends React.PureComponent<AlertProps> {
 
         <DialogFooter>
           <Clickable onClick={this.props.onClose}>
-            <div className="btn btn-primary">
+            <div className="btn btn-sm btn-secondary">
               {this.props.okText}
             </div>
           </Clickable>

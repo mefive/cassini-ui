@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { pick } from 'lodash';
+import pick from 'lodash-es/pick';
 import { keys } from 'ts-transformer-keys';
 import DatesInMonth, { DatesInMonthProps } from './DatesInMonth';
 import MonthsInYear, { MonthsInYearProps } from './MonthsInYear';
@@ -25,8 +25,6 @@ class Calendar extends React.PureComponent<CalendarProps> {
 
   render() {
     const { type } = this.props;
-
-    console.log(datesInMonthKeys, monthsInYearKeys);
 
     if (type === CalendarType.DATES_IN_MONTH) {
       return <DatesInMonth {...pick(this.props, datesInMonthKeys)} />;

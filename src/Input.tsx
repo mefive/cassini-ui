@@ -1,14 +1,19 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import { omit } from 'lodash';
+import omit from 'lodash-es/omit';
 import { keys } from 'ts-transformer-keys';
 
-interface InputProps extends React.InputHTMLAttributes<any> {
+interface Props {
   format?: (string) => string;
   onEnter?: Function;
   prepend?: JSX.Element;
   append?: JSX.Element;
+  onChange?: (value: string | string[] | number, e?: React.ChangeEvent) => void;
 }
+
+type I = React.InputHTMLAttributes<any>;
+
+export type InputProps = Props & Pick<I, Exclude<keyof I, 'onChange'>>;
 
 class Input extends React.PureComponent<InputProps> {
   static defaultProps = {
@@ -30,20 +35,19 @@ class Input extends React.PureComponent<InputProps> {
   }
 
   renderInput(className?: string): JSX.Element {
-    const props = omit(this.props, keys<InputProps>());
+    const props = omit(this.props, keys<Props>());
 
     return (
       <input
+        type="text"
         {...props}
         className={classNames('form-control', this.props.className, className)}
-        type="text"
         value={this.props.value == null ? '' : this.props.value}
         ref={(el) => { this.input = el; }}
         onChange={(e) => {
           let { value } = e.target;
           value = this.props.format(value);
-          e.target.value = value;
-          this.props.onChange(e);
+          this.props.onChange(value, e);
         }}
 
         onKeyPress={(e) => {

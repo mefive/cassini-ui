@@ -8,19 +8,17 @@ export enum NotificationType {
   TYPE_PRIMARY = 'primary',
 }
 
-export type NotificationData = {
+export interface NotificationData {
   message: string;
   type?: NotificationType;
   cb?: Function;
   id?: string;
-};
+  isRawHtml?: boolean;
+}
 
-export interface NotificationProps {
+export interface NotificationProps extends NotificationData {
   wait?: number;
-  cb?: () => void;
   className?: string;
-  type: NotificationType;
-  message: string;
 }
 
 class Notification extends React.PureComponent<NotificationProps> {
@@ -47,18 +45,23 @@ class Notification extends React.PureComponent<NotificationProps> {
   }
 
   render() {
+    const {
+      type, message, isRawHtml, className,
+    } = this.props;
+
     return (
       <div
         className={classNames(
           'alert',
-          { 'alert-success': this.props.type === NotificationType.TYPE_SUCCESS },
-          { 'alert-danger': this.props.type === NotificationType.TYPE_ERROR },
-          { 'alert-info': this.props.type === NotificationType.TYPE_INFO },
-          { 'alert-primary': this.props.type === NotificationType.TYPE_PRIMARY },
-          this.props.className,
+          { 'alert-success': type === NotificationType.TYPE_SUCCESS },
+          { 'alert-danger': type === NotificationType.TYPE_ERROR },
+          { 'alert-info': type === NotificationType.TYPE_INFO },
+          { 'alert-primary': type === NotificationType.TYPE_PRIMARY },
+          className,
         )}
+        dangerouslySetInnerHTML={isRawHtml ? { __html: message } : null}
       >
-        {this.props.message}
+        {isRawHtml ? null : message}
       </div>
     );
   }

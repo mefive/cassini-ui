@@ -1,9 +1,9 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import Clickable from './Clickable';
+import SvgAngleLeft from './icons/solid/AngleLeft';
+import SvgAngleRight from './icons/solid/AngleRight';
 
 export interface PaginationProps {
   total?: number;
@@ -15,21 +15,22 @@ export interface PaginationProps {
 }
 
 const StyledPagination = styled.div`
- text-align: right;
+  display: flex;
+  justify-content: end;
+  align-items: center;
 
   .page-item {
     margin: 0 ${({ theme }) => theme.spacers[0]};
     cursor: pointer;
-    display: inline-block;
     min-width: 30px;
-    text-align: center;
+    justify-content: center;
+    align-items: center;
     height: 30px;
-    line-height: 30px;
+    line-height: 1;
     vertical-align: middle;
-
-    padding: 0 ${({ theme }) => theme.spacers[0]};
     border-radius: 3px;
     border: 1px solid ${({ theme }) => theme.borderColor};
+    display: flex;
 
     &:hover {
       border-color: ${({ theme }) => theme.primary};
@@ -46,6 +47,7 @@ const StyledPagination = styled.div`
 
     &.current {
       background-color: ${({ theme }) => theme.primary};
+      border-color: ${({ theme }) => theme.primary};
       color: #ffffff;
     }
   }
@@ -53,7 +55,7 @@ const StyledPagination = styled.div`
   span {
     display: inline-block;
     vertical-align: middle;
-  
+  } 
 `;
 
 class Pagination extends React.PureComponent<PaginationProps> {
@@ -68,7 +70,7 @@ class Pagination extends React.PureComponent<PaginationProps> {
 
   getItem(page) {
     return (
-      <span
+      <div
         className={classNames(
           'page-item',
           { current: page === this.props.page },
@@ -82,7 +84,7 @@ class Pagination extends React.PureComponent<PaginationProps> {
         }}
       >
         {page}
-      </span>
+      </div>
     );
   }
 
@@ -125,57 +127,58 @@ class Pagination extends React.PureComponent<PaginationProps> {
               { disabled: isFirstPage },
             )}
           >
-            <FontAwesomeIcon icon={faAngleLeft} />
+            <SvgAngleLeft
+              style={{ width: 8 }}
+              className="d-inline-block"
+            />
           </div>
         </Clickable>
 
-        <span>
-          {(() => {
-            const pageItems = [];
+        {(() => {
+          const pageItems = [];
 
-            if (totalPages < 10) {
-              for (let i = 1; i <= totalPages; i += 1) {
-                pageItems.push(this.getItem(i));
-              }
-
-              return pageItems;
-            }
-
-            if (this.props.page < 4) {
-              for (let i = 1; i <= 5; i += 1) {
-                pageItems.push(this.getItem(i));
-              }
-
-              pageItems.push(<span className="ellipsis" key="ellipsis"> ... </span>);
-              pageItems.push(this.getItem(totalPages));
-
-              return pageItems;
-            }
-
-            if (this.props.page > totalPages - 4) {
-              pageItems.push(this.getItem(1));
-              pageItems.push(<span className="ellipsis" key="ellipsis"> ... </span>);
-
-              for (let i = totalPages - 4; i <= totalPages; i += 1) {
-                pageItems.push(this.getItem(i));
-              }
-
-              return pageItems;
-            }
-
-            pageItems.push(this.getItem(1));
-            pageItems.push(<span className="ellipsis" key="ellipsis1"> ... </span>);
-
-            for (let i = this.props.page - 2; i <= this.props.page + 2; i += 1) {
+          if (totalPages < 10) {
+            for (let i = 1; i <= totalPages; i += 1) {
               pageItems.push(this.getItem(i));
             }
 
-            pageItems.push(<span className="ellipsis" key="ellipsis2"> ... </span>);
+            return pageItems;
+          }
+
+          if (this.props.page < 4) {
+            for (let i = 1; i <= 5; i += 1) {
+              pageItems.push(this.getItem(i));
+            }
+
+            pageItems.push(<span className="ellipsis" key="ellipsis"> ... </span>);
             pageItems.push(this.getItem(totalPages));
 
             return pageItems;
-          })()}
-        </span>
+          }
+
+          if (this.props.page > totalPages - 4) {
+            pageItems.push(this.getItem(1));
+            pageItems.push(<span className="ellipsis" key="ellipsis"> ... </span>);
+
+            for (let i = totalPages - 4; i <= totalPages; i += 1) {
+              pageItems.push(this.getItem(i));
+            }
+
+            return pageItems;
+          }
+
+          pageItems.push(this.getItem(1));
+          pageItems.push(<span className="ellipsis" key="ellipsis1"> ... </span>);
+
+          for (let i = this.props.page - 2; i <= this.props.page + 2; i += 1) {
+            pageItems.push(this.getItem(i));
+          }
+
+          pageItems.push(<span className="ellipsis" key="ellipsis2"> ... </span>);
+          pageItems.push(this.getItem(totalPages));
+
+          return pageItems;
+        })()}
 
         <Clickable
           onClick={() => {
@@ -190,7 +193,10 @@ class Pagination extends React.PureComponent<PaginationProps> {
               { disabled: isLastPage },
             )}
           >
-            <FontAwesomeIcon icon={faAngleRight} />
+            <SvgAngleRight
+              style={{ width: 8 }}
+              className="d-inline-block"
+            />
           </div>
         </Clickable>
       </StyledPagination>

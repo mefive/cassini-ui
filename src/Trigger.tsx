@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { contains } from 'dom-helpers/query';
-import { isFunction } from 'lodash';
+import isFunction from 'lodash-es/isFunction';
 import Popover from './Popover';
-// eslint-disable-next-line typescript/no-unused-vars
 import Animate, { AnimateProps } from './Animate';
 import Portal from './Portal';
+import getRealDom from './utils/dom';
 
 export enum Action {
   CLICK = 'click',
@@ -15,7 +15,7 @@ export enum Action {
 export interface TriggerProps extends AnimateProps {
   active?: boolean;
   defaultActive?: boolean;
-  onActiveChange?: Function;
+  onActiveChange?: (active: boolean) => void;
   action?: Action;
   popover?: () => React.ComponentElement<any, any>;
   enterDelay?: number;
@@ -56,15 +56,19 @@ class Trigger extends React.PureComponent<TriggerProps> {
 
   private anchor:Node = null;
 
-  componentWillReceiveProps({ active }) {
-    if (active !== this.props.active) {
-      this.setState({ active });
+  componentWillReceiveProps(nextProps: Readonly<TriggerProps>): void {
+    if (nextProps.active !== this.props.active) {
+      this.setState({ active: nextProps.active });
       this.clearTimers();
+    }
+
+    if (nextProps.disabled && !this.props.disabled) {
+      this.setActive(false);
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.action === Action.CLICK) {
+    if ([Action.CLICK, Action.HOVER].includes(this.props.action)) {
       if (!prevState.active && this.state.active) {
         document.addEventListener('click', this.onClick);
       } else if (prevState.active && !this.state.active) {
@@ -157,8 +161,7 @@ class Trigger extends React.PureComponent<TriggerProps> {
                 if (isFunction(child.ref)) {
                   child.ref(el);
                 }
-
-                this.anchor = el;
+                this.anchor = getRealDom(el);
               },
             },
           );

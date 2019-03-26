@@ -3,8 +3,9 @@ import classNames from 'classnames';
 import query, { scrollTop } from 'dom-helpers/query';
 import * as scrollLeft from 'dom-helpers/query/scrollLeft';
 import classHelper from 'dom-helpers/class';
-import { throttle } from 'lodash';
+import throttle from 'lodash-es/throttle';
 
+import Checkbox from '../Checkbox';
 import Loading from '../Loading';
 import TableHeader from './TableHeader';
 import TableBody from './TableBody';
@@ -12,13 +13,13 @@ import Pagination from '../Pagination';
 import { Column } from './index';
 import StyledTable from './styled';
 
-export interface TableProps {
+export interface TableProps<T = any> {
   className?: string;
   caption?: string;
-  columns?: Column[];
-  renderColumn?: (col: Column) => JSX.Element;
-  dataSource?: object[];
-  rowKey?: string;
+  columns?: Column<T>[];
+  renderColumn?: (col: Column<T>) => JSX.Element;
+  dataSource?: T[];
+  rowKey?: keyof T;
   pagination?: {
     page?: number;
     enablePagination?: boolean;
@@ -26,12 +27,16 @@ export interface TableProps {
     totalPages?: number;
     rowsPerPage?: number;
   };
-  loading?: boolean;
+  isLoading?: boolean;
   height?: number | string;
   noWrap?: boolean;
+  rowSelection?: {
+    selectedRowKeys: string[];
+    onChange: (keys: string[]) => void;
+  };
 }
 
-class Table extends React.PureComponent<TableProps> {
+class Table<T> extends React.PureComponent<TableProps<T>> {
   static defaultProps = {
     caption: null,
     className: null,
@@ -39,9 +44,10 @@ class Table extends React.PureComponent<TableProps> {
     dataSource: null,
     rowKey: null,
     pagination: null,
-    loading: false,
+    isLoading: false,
     height: null,
     noWrap: false,
+    renderColumn: col => col.title,
   };
 
   private table: HTMLDivElement = null;
@@ -146,6 +152,30 @@ class Table extends React.PureComponent<TableProps> {
     return dataSource.slice(start, start + rowsPerPage);
   }
 
+  private renderColumn = (col: Column<T>) => {
+    const { rowSelection } = this.props;
+
+    if (rowSelection && col.id === 'selection') {
+      const dataSource = this.getPagedDataSource(this.props.dataSource);
+
+      return (
+        <Checkbox
+          className="d-inline-block vertical-middle"
+          value={dataSource && dataSource.length > 0 && dataSource
+            .every(row => rowSelection.selectedRowKeys.indexOf(row[this.props.rowKey]) !== -1)}
+          onChange={(checked) => {
+            if (checked) {
+              rowSelection.onChange(dataSource.map(data => data[this.props.rowKey]));
+            } else {
+              rowSelection.onChange([]);
+            }
+          }}
+        />
+      );
+    }
+    return this.props.renderColumn(col);
+  };
+
 
   updateColumns = (columns = this.props.columns) => {
     const fixed = [];
@@ -159,12 +189,41 @@ class Table extends React.PureComponent<TableProps> {
       }
     });
 
-    this.setState({ columns: [...fixed, ...rest] });
+    const selectionColumn: Column[] = [];
+
+    if (this.props.rowSelection != null) {
+      selectionColumn.push({
+        id: 'selection',
+        align: 'center',
+        render: (row) => {
+          const { rowKey, rowSelection } = this.props;
+          return (
+            <Checkbox
+              className="d-inline-block vertical-middle"
+              value={rowSelection.selectedRowKeys.indexOf(row[rowKey]) !== -1}
+              onChange={(checked) => {
+                const selectedRowKeys: Set<string> = new Set(rowSelection.selectedRowKeys);
+
+                if (checked) {
+                  selectedRowKeys.add(row[rowKey]);
+                } else {
+                  selectedRowKeys.delete(row[rowKey]);
+                }
+
+                rowSelection.onChange(Array.from(selectedRowKeys));
+              }}
+            />
+          );
+        },
+      });
+    }
+
+    this.setState({ columns: [...selectionColumn, ...fixed, ...rest] });
   };
 
   render() {
     const {
-      pagination, loading, height, noWrap, renderColumn,
+      pagination, isLoading, height, noWrap,
     } = this.props;
 
     const { columns, verticalScrollbarWidth } = this.state;
@@ -176,13 +235,13 @@ class Table extends React.PureComponent<TableProps> {
     }
 
     const columnsFixed = columns.filter(({ fixed }) => fixed);
-    const noData = !loading && dataSource.length === 0;
+    const noData = !isLoading && dataSource.length === 0;
 
     return (
       <StyledTable
         className={classNames(
           this.props.className,
-          { loading },
+          { loading: isLoading },
           { 'no-data': noData },
           { 'fixed-header': height != null },
         )}
@@ -205,13 +264,17 @@ class Table extends React.PureComponent<TableProps> {
                     <caption>{this.props.caption}</caption>
                   )}
 
-                  <TableHeader
+                  <TableHeader<T>
                     columns={columns}
                     noWrap={noWrap}
-                    renderColumn={renderColumn}
+                    renderColumn={this.renderColumn}
                   />
 
-                  <TableBody columns={columns} dataSource={dataSource} noWrap={noWrap} />
+                  <TableBody<T>
+                    columns={columns}
+                    dataSource={dataSource}
+                    noWrap={noWrap}
+                  />
                 </table>
               </div>
             );
@@ -239,11 +302,11 @@ class Table extends React.PureComponent<TableProps> {
               ref={(el) => { this.tableHeaderFixed = el; }}
             >
               <table className="table">
-                <TableHeader
+                <TableHeader<T>
                   columns={columns}
                   noWrap={noWrap}
                   columnsWidth={this.state.columnsWidth}
-                  renderColumn={renderColumn}
+                  renderColumn={this.renderColumn}
                 />
               </table>
             </div>
@@ -259,10 +322,10 @@ class Table extends React.PureComponent<TableProps> {
                 ref={(el) => { this.tableColumnFixed = el; }}
               >
                 <table className="table">
-                  <TableHeader
+                  <TableHeader<T>
                     columns={columnsFixed}
                     noWrap={noWrap}
-                    renderColumn={renderColumn}
+                    renderColumn={this.renderColumn}
                   />
 
                   <TableBody columns={columnsFixed} dataSource={dataSource} noWrap={noWrap} />
@@ -275,10 +338,10 @@ class Table extends React.PureComponent<TableProps> {
                   style={{ right: verticalScrollbarWidth }}
                 >
                   <table className="table">
-                    <TableHeader
+                    <TableHeader<T>
                       columns={columnsFixed}
                       columnsWidth={this.state.columnsWidth}
-                      renderColumn={renderColumn}
+                      renderColumn={this.renderColumn}
                       noWrap={noWrap}
                     />
                   </table>
@@ -288,7 +351,7 @@ class Table extends React.PureComponent<TableProps> {
           )}
         </div>
 
-        {loading && (
+        {isLoading && (
           <Loading>加载中...</Loading>
         )}
 

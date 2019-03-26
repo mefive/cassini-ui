@@ -1,12 +1,13 @@
 import * as React from 'react';
 import * as moment from 'moment';
 import classNames from 'classnames';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
-import { padStart, range } from 'lodash';
+import padStart from 'lodash-es/padStart';
+import range from 'lodash-es/range';
+import SvgAngleLeft from '../icons/solid/AngleLeft';
+import SvgAngleRight from '../icons/solid/AngleRight';
 import Calendar from './Calendar';
 import Clickable from '../Clickable';
-import { StyledCalendar, StyledSwither } from './styled';
+import { StyledCalendar, StyledSwitcher } from './styled';
 
 const calendar = new Calendar();
 
@@ -68,7 +69,7 @@ class DatesInMonth extends React.PureComponent<DatesInMonthProps> {
         className={this.props.className}
         style={{ width: this.props.width }}
       >
-        <StyledSwither>
+        <StyledSwitcher>
           <Clickable
             onClick={() => {
               const month = currentMonth.clone();
@@ -80,8 +81,7 @@ class DatesInMonth extends React.PureComponent<DatesInMonthProps> {
             }}
           >
             <div className="switcher-action">
-
-              <FontAwesomeIcon icon={faAngleLeft} />
+              <SvgAngleLeft style={{ width: 8, height: 16 }} />
             </div>
           </Clickable>
 
@@ -103,10 +103,10 @@ class DatesInMonth extends React.PureComponent<DatesInMonthProps> {
             }}
           >
             <div className="switcher-action">
-              <FontAwesomeIcon icon={faAngleRight} />
+              <SvgAngleRight style={{ width: 8, height: 16 }} />
             </div>
           </Clickable>
-        </StyledSwither>
+        </StyledSwitcher>
 
         <table className="date-table">
           <thead>

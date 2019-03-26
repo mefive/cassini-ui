@@ -1,3 +1,5 @@
+import flatten from 'lodash-es/flatten';
+
 export function travel(
   array = [],
   cb: (node, parentNode, level: number) => void = () => {},
@@ -23,13 +25,39 @@ export function flattenWith(
   reducer: (node, parentNode, level: number) => any,
   key: string,
 ) {
-  const flatten = [];
+  const f = [];
 
   travel(
     array,
-    (...p) => flatten.push(reducer(...p)),
+    (...p) => f.push(reducer(...p)),
     key,
   );
 
-  return flatten;
+  return f;
+}
+
+export function flatMapDeep<T>(array: T[], iteratee: (node: T) => T[]): T[] {
+  if (!array || array.length === 0) {
+    return [];
+  }
+
+  return [
+    ...array,
+    ...flatMapDeep(flatten(array.map(iteratee)), iteratee),
+  ];
+}
+
+export function mapTree<T extends { children?: T[] }, P extends { children?: P[] }>(
+  collection: T[],
+  iteratee: (node: T) => P,
+): P[] {
+  return collection.map((cNode) => {
+    const pNode = iteratee(cNode);
+
+    if (cNode.children == null || cNode.children.length === 0) {
+      return pNode;
+    }
+
+    return pNode && { ...pNode, children: mapTree(cNode.children, iteratee) };
+  });
 }

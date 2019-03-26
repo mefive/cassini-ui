@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled from 'styled-components';
-// eslint-disable-next-line typescript/no-unused-vars
 import Trigger, { TriggerProps, Action } from './Trigger';
 import { Animation } from './Animate';
 import Popover, { Placement } from './Popover';

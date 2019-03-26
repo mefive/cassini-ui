@@ -1,12 +1,22 @@
 import styled from 'styled-components';
 
-export const StyledSwither = styled.div`
+export const StyledSwitcher = styled.div`
   display: flex;
   align-items: center;
   
   .switcher-action {
-    padding: ${0.5 * (30 - 14)}px ${0.5 * (30 - 7)}px;
+    padding: ${0.5 * (30 - 16)}px ${0.5 * (30 - 8)}px;
     line-height: 1;
+    position: relative;
+    
+    &:after {
+      content: ' ';
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+    }
     
     &:hover {
       background-color: ${({ theme }) => theme.gray300};
@@ -24,6 +34,7 @@ export const StyledSwither = styled.div`
 export const StyledCalendar = styled.div`
   .date-table {
     width: 100%;
+    min-height: 220px;
     
     thead td,
     .date {

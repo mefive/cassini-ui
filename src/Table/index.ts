@@ -1,13 +1,14 @@
-export type Column = {
-  key: string;
+export type Column<T = any> = {
+  id?: string | number;
+  key?: string & keyof T;
   title?: string;
   width?: number;
   minWidth?: number;
   align?: string;
-  children?: Column[];
+  children?: Column<T>[];
   noWrap?: boolean;
-  render?: (row: object, rowIndex: number) => JSX.Element;
-  wrapper?: (row: object, rowIndex: number) => JSX.Element | JSX.Element;
+  render?: (row: T, rowIndex: number) => JSX.Element | string;
+  wrapper?: (row: T, rowIndex: number) => JSX.Element | JSX.Element;
   fixed?: boolean;
 };
 

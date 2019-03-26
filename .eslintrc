@@ -29,7 +29,14 @@
         "every": ["id"],
       }
     }],
-    "typescript/no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }]
+    "typescript/no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "varsIgnorePattern": "[pP]rops$",
+        "args": "after-used",
+        "ignoreRestSiblings": true
+      }]
   },
   "env": {
     "browser": true

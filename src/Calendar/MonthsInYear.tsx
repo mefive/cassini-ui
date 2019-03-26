@@ -1,11 +1,11 @@
 import * as React from 'react';
 import * as moment from 'moment';
 import classNames from 'classnames';
-import { range } from 'lodash';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import range from 'lodash-es/range';
 import Clickable from '../Clickable';
-import { StyledCalendar, StyledSwither } from './styled';
+import SvgAngleLeft from '../icons/solid/AngleLeft';
+import SvgAngleRight from '../icons/solid/AngleRight';
+import { StyledCalendar, StyledSwitcher } from './styled';
 import Grid, { Col, Row } from '../Grid';
 
 export type MonthsInYearProps = {
@@ -46,15 +46,14 @@ class MonthsInYear extends React.PureComponent<MonthsInYearProps> {
 
     return (
       <StyledCalendar style={{ width: this.props.width }}>
-        <StyledSwither>
+        <StyledSwitcher>
           <Clickable
             onClick={() => this.setState({
               year: moment(`${year}`).subtract(1, 'year').year(),
             })}
           >
             <div className="switcher-action">
-
-              <FontAwesomeIcon icon={faAngleLeft} />
+              <SvgAngleLeft style={{ width: 8 }} />
             </div>
           </Clickable>
 
@@ -68,10 +67,10 @@ class MonthsInYear extends React.PureComponent<MonthsInYearProps> {
             })}
           >
             <div className="switcher-action">
-              <FontAwesomeIcon icon={faAngleRight} />
+              <SvgAngleRight style={{ width: 8 }} />
             </div>
           </Clickable>
-        </StyledSwither>
+        </StyledSwitcher>
 
         <Grid className="month-panel">
           <Row>

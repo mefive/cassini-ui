@@ -1,6 +1,12 @@
 import * as React from 'react';
 import Container from '../Container';
-import WithForm from './WithForm';
+import UserForm from './UserForm';
+
+export interface User {
+  name: string;
+  remember: boolean;
+  gender: string;
+}
 
 class TestForm extends React.PureComponent {
   state = {
@@ -8,7 +14,7 @@ class TestForm extends React.PureComponent {
       name: 'mefive',
       remember: true,
       gender: 'male',
-    },
+    } as User,
   };
 
   render() {
@@ -16,7 +22,7 @@ class TestForm extends React.PureComponent {
 
     return (
       <Container title="Form">
-        <WithForm
+        <UserForm
           dataSource={this.state.dataSource}
           onChange={(key, value) => this.setState({
             dataSource: {

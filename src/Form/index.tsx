@@ -1,18 +1,28 @@
 import * as React from 'react';
-import { isFunction, omit, pick } from 'lodash';
+import isFunction from 'lodash-es/isFunction';
 import classNames from 'classnames';
-import styled from 'styled-components';
-import Checkbox from '../Checkbox';
 
 export { default } from './Form';
 export { default as FormItem } from './FormItem';
 
-export interface WithFormProps {
-  dataSource?: object;
-  onChange?: (key: string, value: any) => void;
+export * from './Form';
+export * from './FormItem';
+
+// type Value = string | string[] | number | boolean;
+type Value = any;
+
+export interface WithFormProps<T = any> {
+  dataSource?: T;
+  onChange?: (key: keyof T, value: any) => void;
   onSubmit?: () => void;
   isSubmitting?: boolean;
   isDirty?: boolean;
+  readOnly?: boolean;
+
+  validate?: (fields?: keyof T | (keyof T)[]) => boolean;
+  getFieldDecorator?: (name: keyof T, options?: FieldOption) => (Item: JSX.Element) => JSX.Element;
+  errors?: Map<keyof T, string>;
+  clearError?: Function;
 }
 
 type Rule = {
@@ -20,7 +30,7 @@ type Rule = {
   minLength?: number,
   maxLength?: number,
   regexp?: RegExp,
-  validator?: (any) => boolean,
+  validator?: (value: Value) => boolean,
   message?: string,
 };
 
@@ -28,142 +38,143 @@ type FieldOption = {
   rules?: Rule[];
 };
 
-export interface FormProps extends WithFormProps {
-  validate?: (fields?: string | string[]) => boolean;
-  getFieldDecorator?: (name: string, options?: FieldOption) => (Item: JSX.Element) => JSX.Element;
-  errors?: { [s: string]: string; };
-  clearError?: Function;
-}
+function withForm
+  <T extends React.ComponentClass<P>, P extends WithFormProps<S>, S>(WrappedComponent: T): T {
+  const W = WrappedComponent as React.ComponentClass<P>;
 
-export const withForm = (WrappedComponent) => {
-  const StyledForm = styled(WrappedComponent)`
-    .required {
-      position: relative;
-      &:before {
-        content: '*';
-        color: ${({ theme }) => theme.red};
-        font-size: 16px;
-        margin-right: 0.25rem;
-        vertical-align: middle;
-        left: 0;
-        top: 0;
-      }
-    }
-    
-    .col-form-label {
-      &.right {
-        text-align: right;
-        padding-right: 15px;
-      }
-    } 
-  `;
+  class DecoratedWithForm extends React.PureComponent<P> {
+    private rules: Map<keyof S, Rule[]> = new Map();
 
-  class DecoratedForm extends React.PureComponent<WithFormProps> {
-    static defaultProps = {
-      dataSource: {},
-      onChange: () => {},
-    };
-
-    private rules: Map<string, Rule[]> = new Map();
-
-    private wrappedInstance: any = null;
+    private onChangeMap: Map<keyof S, {
+      onChange: (value: Value, e?: React.ChangeEvent<HTMLInputElement>) => void,
+      elementOnChange: Function,
+    }> = new Map();
 
     state = {
-      errors: {},
+      errors: new Map<keyof S, string>(),
     };
 
-    getWrappedInstance() {
-      return this.wrappedInstance;
+    getOnChangeFunc(name: keyof S, Item: JSX.Element) {
+      const func = this.onChangeMap.get(name);
+
+      if (func && func.elementOnChange === Item.props.onChange) {
+        return func.onChange;
+      }
+
+      const onChange = (
+        value: Value | React.ChangeEvent<HTMLInputElement>,
+        event?: React.ChangeEvent<HTMLInputElement>,
+      ) => {
+        let v;
+
+        if (typeof value === 'object' && 'target' in value) {
+          const {
+            checked,
+            value: vv,
+            type,
+          } = (value as React.ChangeEvent<HTMLInputElement>).target;
+
+          if (['checkbox', 'radio'].indexOf(type) !== -1) {
+            v = checked;
+          } else {
+            v = vv;
+          }
+        } else {
+          v = value;
+        }
+
+        if (isFunction(Item.props.onChange)) {
+          Item.props.onChange(value, event);
+        }
+
+        this.clearError(name);
+
+        this.props.onChange(name, v);
+      };
+
+      this.onChangeMap.set(name, { onChange, elementOnChange: Item.props.onChange });
+
+      return onChange;
     }
 
-    onChange = (
-      e: React.ChangeEvent<HTMLInputElement> | string | number | boolean,
-      Item: JSX.Element,
-      name: string,
-    ) => {
-      let value = null;
-
-      if (typeof e === 'object') {
-        const { checked, value: v, type } = e.target;
-
-        if (['checkbox', 'radio'].indexOf(type) !== -1) {
-          value = checked;
-        } else {
-          value = v;
-        }
-      } else {
-        value = e;
-      }
-
-      if (isFunction(Item.props.onChange)) {
-        Item.props.onChange(value);
-      }
-
-      this.clearError(name);
-
-      this.props.onChange(name, value);
-    };
-
-    getFieldDecorator = (name: string, options: FieldOption = {}) => (Item: JSX.Element) => {
-      const error = this.state.errors[name];
+    getFieldDecorator = (name: keyof S, options: FieldOption) => (Item: JSX.Element) => {
+      const error = this.state.errors.get(name);
 
       if (options) {
         this.rules.set(name, options.rules);
       }
 
-      const value = this.props.dataSource[name];
+      const { dataSource } = this.props;
+
+      const value = dataSource ? dataSource[name] : null;
 
       return React.cloneElement(Item, {
         className: classNames(Item.props.className, {
           'is-invalid': error != null,
         }),
         value,
-        checked: Item.type === Checkbox ? value : undefined,
-        onChange: e => this.onChange(e, Item, name),
+        onChange: this.getOnChangeFunc(name, Item),
         name,
         error,
       });
     };
 
-    clearError = (field) => {
-      let fields;
+    clearError = (field: keyof S | (keyof S)[]) => {
+      const e = this.state.errors;
+
+      let fields: (keyof S)[];
 
       if (field == null) {
         fields = Array.from(this.rules.keys());
       } else if (typeof field === 'string') {
         fields = [field];
       } else {
-        fields = field;
+        fields = field as (keyof S)[];
       }
 
-      const { errors } = this.state;
+      if (e.size === 0 || !fields.some(f => e.has(f))) {
+        return;
+      }
 
-      this.setState({ errors: omit(errors, fields) });
+      const errors = new Map(e);
+
+      fields.forEach(f => errors.delete(f));
+
+      this.setState({ errors });
     };
 
-    validate = (field) => {
-      let { errors } = this.state;
-      errors = pick(errors, Array.from(this.rules.keys()));
+    validate = (field: keyof S | (keyof S)[]) => {
+      const { dataSource } = this.props as { dataSource: S };
 
-      let fields;
+      const e = this.state.errors;
+
+      const errors = new Map<keyof S, string>();
+
+      this.state.errors.forEach((value, key) => {
+        if (this.rules.has(key)) {
+          errors.set(key, e.get(key));
+        }
+      });
+
+      let fields: (keyof S)[];
 
       if (field == null) {
         fields = Array.from(this.rules.keys());
       } else if (typeof field === 'string') {
         fields = [field];
       } else {
-        fields = field;
+        fields = field as (keyof S)[];
       }
 
-      const addToError = (name, message) => {
-        if (name in this.state.errors) {
-          delete errors[name];
+      const addToError = (name: keyof S, message) => {
+        if (e.has(name)) {
+          errors.delete(name);
         }
 
-        if (name in errors) {
-          errors[name] = `${errors[name]}, ${message}`;
+        if (errors.has(name)) {
+          errors.set(name, `${errors.get(name)}, ${message}`);
         } else {
-          errors[name] = message;
+          errors.set(name, message);
         }
       };
 
@@ -171,14 +182,14 @@ export const withForm = (WrappedComponent) => {
         const rules = this.rules.get(name);
 
         if (rules) {
-          let value = this.props.dataSource[name];
+          let value: any = dataSource ? dataSource[name] : null;
 
           for (let i = 0; i < rules.length; i += 1) {
             const rule = rules[i];
 
             if (value == null || value === '' || (typeof value === 'string' && value.trim() === '')) {
               if (rule.required) {
-                errors[name] = rule.message || '必填项不能为空';
+                errors.set(name, rule.message || '必填项不能为空');
               }
 
               break;
@@ -203,7 +214,7 @@ export const withForm = (WrappedComponent) => {
 
       this.setState({ errors });
 
-      return Object.keys(errors).length === 0;
+      return errors.size === 0;
     };
 
     render() {
@@ -211,17 +222,18 @@ export const withForm = (WrappedComponent) => {
       this.rules = new Map();
 
       return (
-        <StyledForm
+        <W
           {...this.props}
           validate={this.validate}
           getFieldDecorator={this.getFieldDecorator}
           errors={this.state.errors}
           clearError={this.clearError}
-          ref={(el) => { this.wrappedInstance = el; }}
         />
       );
     }
   }
 
-  return DecoratedForm;
-};
+  return DecoratedWithForm as any as T;
+}
+
+export { withForm };

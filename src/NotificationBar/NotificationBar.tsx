@@ -13,7 +13,7 @@ export interface NotificationBarProps {
 
 const StyledNotificationBar = styled.div`
   position: fixed;
-  z-index: ${({ theme }) => theme.zindexTooltip};
+  z-index: 9999;
   top: 60px;
   width: 400px;
   left: 50%;
@@ -36,15 +36,13 @@ class NotificationBar extends React.PureComponent<NotificationBarProps> {
             leaveClassName={Animation.SLIDE_DOWN_OUT}
           >
             {this.props.dataSource.map((data, index) => (
-              <div
+              <Notification
                 key={data.id}
-              >
-                <Notification
-                  message={data.message}
-                  type={data.type}
-                  cb={() => this.props.cb(index)}
-                />
-              </div>
+                message={data.message}
+                type={data.type}
+                cb={() => this.props.cb(index)}
+                isRawHtml={data.isRawHtml}
+              />
             ))}
           </Animate>
         </StyledNotificationBar>

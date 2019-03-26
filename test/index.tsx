@@ -10,7 +10,7 @@ import TheForm from './TestForm';
 import TestModal from './TestModal';
 import TestDialog from './TestDialog';
 import TestTooltip from './TestTooltip';
-import TestTable from './TestTable/TestTable';
+import TestTable from './TestTable';
 import TestCalendar from './TestCalendar';
 
 // eslint-disable-next-line

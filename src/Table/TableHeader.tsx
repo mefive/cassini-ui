@@ -1,44 +1,48 @@
 import * as React from 'react';
-import { groupBy } from 'lodash';
+import groupBy from 'lodash-es/groupBy';
 import classNames from 'classnames';
-import memoize from 'memoize-one';
+import * as memoize from 'memoize-one';
 import { Column } from './index';
 
-export interface TableHeaderProps {
-  columns: Column[];
+export interface TableHeaderProps<T = any> {
+  columns: Column<T>[];
   columnsWidth?: { [s: string]: number };
   noWrap?: boolean;
-  renderColumn?: (col: Column, index: number) => JSX.Element;
+  renderColumn?: (col: Column<T>, index: number) => JSX.Element;
 }
 
-interface FlattenColumn extends Column {
+interface FlattenColumn<T> extends Column<T> {
   level?: number;
   paths?: string[];
 }
 
-class TableHeader extends React.PureComponent<TableHeaderProps> {
+class TableHeader<T = any> extends React.PureComponent<TableHeaderProps<T>> {
   static defaultProps = {
     columnsWidth: {},
     noWrap: false,
   };
 
-  private getFlattenColumns: (cols: FlattenColumn[]) => FlattenColumn[] = memoize(
-    (columns: FlattenColumn[]) => columns.reduce(
+  private getFlattenColumns: (cols: FlattenColumn<T>[]) => FlattenColumn<T>[] = memoize(
+    (columns: FlattenColumn<T>[]) => columns.reduce(
       (p, c) => [...p, ...this.buildFlattenColumns(c, [], 1, [])],
       [],
     ),
   );
 
+  private static getKey(col: Column): string {
+    return col.key || `${col.id}`;
+  }
+
   buildFlattenColumns(
-    col: FlattenColumn,
-    cols: FlattenColumn[],
+    col: FlattenColumn<T>,
+    cols: FlattenColumn<T>[],
     level: number,
     paths: string[],
-  ): FlattenColumn[] {
-    const column: FlattenColumn = {
+  ): FlattenColumn<T>[] {
+    const column: FlattenColumn<T> = {
       ...col,
       level,
-      paths: [...paths, col.key],
+      paths: [...paths, TableHeader.getKey(col)],
     };
 
     return [
@@ -50,7 +54,7 @@ class TableHeader extends React.PureComponent<TableHeaderProps> {
           c,
           cols,
           level + 1,
-          [...paths, col.key],
+          [...paths, TableHeader.getKey(col)],
         ),
       ], []),
     ];
@@ -62,7 +66,7 @@ class TableHeader extends React.PureComponent<TableHeaderProps> {
     const levelGroupedColumns = groupBy(
       flattenColumns,
       ({ level }) => level,
-    ) as { [s: string]: FlattenColumn[] };
+    ) as { [s: string]: FlattenColumn<T>[] };
     const max = Object.keys(levelGroupedColumns).length;
 
     return (
@@ -74,18 +78,18 @@ class TableHeader extends React.PureComponent<TableHeaderProps> {
             <tr key={level}>
               {columns.map((col, colIndex) => (
                 <th
-                  key={col.key}
+                  key={TableHeader.getKey(col)}
                   scope="col"
                   style={{
-                    minWidth: columnsWidth[col.key] || col.minWidth,
+                    minWidth: columnsWidth[TableHeader.getKey(col)] || col.minWidth,
                   }}
                   colSpan={col.children
                     ? flattenColumns.filter(
-                      c => c.children == null && c.paths[+level - 1] === col.key,
+                      c => c.children == null && c.paths[+level - 1] === TableHeader.getKey(col),
                     ).length
                     : null}
                   rowSpan={col.children ? null : (max - +level) + 1}
-                  data-key={col.key}
+                  data-key={TableHeader.getKey(col)}
                   className={classNames(
                     { 'text-nowrap': noWrap || col.noWrap },
                     { [`text-${col.align}`]: col.align },

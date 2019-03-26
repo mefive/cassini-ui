@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckSquare, faSquare } from '@fortawesome/free-solid-svg-icons';
+import SvgCheckSquare from '../../src/icons/solid/CheckSquare';
+import SvgSquare from '../../src/icons/solid/Square';
 import Container from '../Container';
 import Input from '../../src/Input';
 import Checkbox from '../../src/Checkbox';
@@ -31,17 +31,20 @@ class TheForm extends React.PureComponent {
           <div className="flex-1">
             <Input
               value={this.state.name}
-              onChange={e => this.setState({ name: e.target.value })}
+              onChange={name => this.setState({ name })}
             />
           </div>
 
           <div className="flex-1 ml-2">
             <Checkbox
               checked={this.state.remembered}
-              onChange={e => this.setState({ remembered: e.target.checked })}
+              onChange={remembered => this.setState({ remembered })}
               icon={checked => (
                 <div className="mr-0">
-                  <FontAwesomeIcon icon={checked ? faCheckSquare : faSquare} />
+                  {checked
+                    ? (<SvgCheckSquare />)
+                    : (<SvgSquare />)
+                  }
                 </div>
               )}
             >

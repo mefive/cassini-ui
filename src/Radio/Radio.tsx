@@ -1,24 +1,30 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { uniqueId, omit } from 'lodash';
-import { keys } from 'ts-transformer-keys';
+import uniqueId from 'lodash-es/uniqueId';
+
+type Value = string | string[] | number | boolean;
 
 type Props = {
-  icon: (checked: boolean) => void;
+  icon?: (checked: boolean) => void;
   children?: JSX.Element | string;
+  value?: Value;
+  onChange?: (value: Value) => void;
 };
 
-export type RadioProps = Props & React.InputHTMLAttributes<any>;
+type I = React.InputHTMLAttributes<any>;
+
+export type RadioProps = Props & Pick<I, Exclude<keyof I, 'value' | 'onChange'>>;
 
 const StyledRadio = styled.div`
   label {
     margin-bottom: 0;
     display: flex;
-    align-items: center;
+    //align-items: center;
   }
   
   input {
     margin-right: ${({ theme }) => theme.spacers[0]};
+    margin-top: 0.2em;
   }
 `;
 
@@ -35,8 +41,9 @@ class Radio extends React.PureComponent<RadioProps> {
   }
 
   render() {
-    const { icon } = this.props;
-    const radioKeys = keys<Props>();
+    const {
+      icon, children, value, ...props
+    } = this.props;
 
     return (
       <StyledRadio>
@@ -46,13 +53,14 @@ class Radio extends React.PureComponent<RadioProps> {
           {icon != null && icon(this.props.checked)}
 
           <input
-            {...omit(this.props, radioKeys)}
+            {...props}
             type="radio"
             id={this.id}
             hidden={icon != null}
+            onChange={() => this.props.onChange(value)}
           />
 
-          {this.props.children}
+          {children}
         </label>
       </StyledRadio>
     );

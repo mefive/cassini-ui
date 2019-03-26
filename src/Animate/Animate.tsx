@@ -2,7 +2,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import { Transition, TransitionGroup } from 'react-transition-group';
 import { EnterHandler } from 'react-transition-group/Transition';
-import StyledAnimate from './styled';
+import './style.scss';
 
 export enum Animation {
   SLIDE_DOWN_IN = 'slide-down-in',
@@ -58,8 +58,6 @@ class Animate extends React.PureComponent<AnimateProps> {
 
     return (
       <React.Fragment>
-        <StyledAnimate />
-
         <TransitionGroup>
           {this.props.children && React.Children.map(this.props.children, (child: JSX.Element) => (
             <Transition

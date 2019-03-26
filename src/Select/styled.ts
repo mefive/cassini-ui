@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { ellipsis } from 'polished';
+import CustomSelect from '../CustomSelect';
 
-export const StyledSelect = styled.div`
+export const StyledSelect = styled(CustomSelect)`
   ${ellipsis()};
   display: block;
   
@@ -18,14 +19,11 @@ export const StyledSelect = styled.div`
       font-size: ${({ theme }) => theme.fontSizeSm};
       padding: 0 ${({ theme }) => theme.spacers[1]};
       border-radius: ${({ theme }) => theme.borderRadiusSm};
-      position: relative;
+      display: flex;
+      align-items: center;
       
       margin-left: ${({ theme }) => theme.spacers[0]};
       margin-top: ${({ theme }) => theme.spacers[0]};
-      
-      & > * {
-        vertical-align: middle;
-      }
       
       svg {
         margin-left: ${({ theme }) => theme.spacers[0]};

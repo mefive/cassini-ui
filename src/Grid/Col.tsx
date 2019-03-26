@@ -1,6 +1,6 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import { pick } from 'lodash';
+import pick from 'lodash-es/pick';
 
 type Layout = {
   span?: number,

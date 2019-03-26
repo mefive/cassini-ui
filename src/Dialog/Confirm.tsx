@@ -1,5 +1,4 @@
 import * as React from 'react';
-// eslint-disable-next-line typescript/no-unused-vars
 import Dialog, { DialogBody, DialogFooter, DialogProps } from './Dialog';
 import Clickable from '../Clickable';
 
@@ -11,8 +10,8 @@ interface ConfirmProps extends DialogProps {
 
 class Confirm extends React.PureComponent<ConfirmProps> {
   static defaultProps = {
-    okText: 'Ok',
-    cancelText: 'Cancel',
+    okText: '确定',
+    cancelText: '取消',
     onConfirm: () => {},
   };
 
@@ -25,13 +24,13 @@ class Confirm extends React.PureComponent<ConfirmProps> {
 
         <DialogFooter>
           <Clickable onClick={this.props.onClose}>
-            <div className="btn btn-white">
+            <div className="btn btn-sm btn-gray">
               {this.props.cancelText}
             </div>
           </Clickable>
 
           <Clickable onClick={this.props.onConfirm}>
-            <div className="btn btn-primary">
+            <div className="btn btn-sm btn-secondary">
               {this.props.okText}
             </div>
           </Clickable>

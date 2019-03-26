@@ -16,7 +16,7 @@ class Grid extends React.PureComponent<Props & React.HTMLAttributes<any>> {
     return (
       <div
         {...props}
-        className={classNames('container', props.className)}
+        className={classNames('container-fluid', props.className)}
         style={{
           paddingLeft: -gutter * 0.5,
           paddingRight: -gutter * 0.5,

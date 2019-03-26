@@ -1,19 +1,9 @@
 import * as React from 'react';
 
-function safeSetState(WrappedComponent: React.ComponentClass<any, any>): any {
-  class SafeSetState extends WrappedComponent {
-    componentDidMount(): void {}
+function safeSetState<T extends React.ComponentClass>(WrappedComponent: T): T {
+  const W = WrappedComponent as React.ComponentClass;
 
-    componentDidCatch(): void {}
-
-    componentDidUpdate(): void {}
-
-    componentWillReceiveProps(): void {}
-
-    componentWillMount(): void {}
-
-    componentWillUpdate(): void {}
-
+  class SafeSetState extends React.PureComponent<{ forwardedRef }> {
     componentWillUnmount() {
       this.child.setState = () => { };
     }
@@ -24,7 +14,7 @@ function safeSetState(WrappedComponent: React.ComponentClass<any, any>): any {
       const { forwardedRef, ...rest } = this.props;
 
       return (
-        <WrappedComponent
+        <W
           ref={(child) => {
             this.child = child;
             if (forwardedRef) {
@@ -37,9 +27,12 @@ function safeSetState(WrappedComponent: React.ComponentClass<any, any>): any {
     }
   }
 
-  return React.forwardRef((props, ref) => (
+  // eslint-disable-next-line
+  const S = React.forwardRef((props, ref) => (
     <SafeSetState {...props} forwardedRef={ref} />
   ));
+
+  return S as any as T;
 }
 
 export default safeSetState;

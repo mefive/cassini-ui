@@ -11,20 +11,26 @@ interface RadioGroupProps {
     title: string,
   }[];
   icon?: (checked: boolean) => void;
+  format?: (string) => Value;
+  className?: string;
+  readOnly?: boolean;
 }
 
 class RadioGroup extends React.PureComponent<RadioGroupProps> {
   static defaultProps = {
-    value: null,
     onChange: () => {},
-    radios: null,
+    format: v => v,
+    readOnly: false,
   };
 
-  private onChange:(e: React.ChangeEvent<HTMLInputElement>) => void = (e) => {
-    const { value } = e.target;
+  private onChange:(value: Value) => void = (value) => {
+    if (this.props.readOnly) {
+      return;
+    }
 
-    if (value !== this.props.value) {
-      this.props.onChange(value);
+    const fv = this.props.format(value);
+    if (fv !== this.props.value) {
+      this.props.onChange(fv);
     }
   };
 
@@ -32,7 +38,7 @@ class RadioGroup extends React.PureComponent<RadioGroupProps> {
     const { radios } = this.props;
 
     return (
-      <div>
+      <div className={this.props.className}>
         {radios && radios.map(radio => (
           <Radio
             key={`${radio.value}`}

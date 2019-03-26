@@ -1,11 +1,10 @@
 import * as React from 'react';
 import * as keycode from 'keycode';
 import classNames from 'classnames';
-import { debounce } from 'lodash';
+import debounce from 'lodash-es/debounce';
 import styled from 'styled-components';
 import { addClass, removeClass } from 'dom-helpers/class';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import SvgTimes from './icons/solid/Times';
 
 import Portal from './Portal';
 import Animate, { Animation } from './Animate';
@@ -23,7 +22,7 @@ export const StyledModalDialog = styled.div`
 
 export interface ModalProps {
   title?: string,
-  onClose?: (Event) => void,
+  onClose?: (e?: React.MouseEvent<any>) => void,
   onEnter?: Function,
   visible?: boolean,
   width?: string | number,
@@ -163,8 +162,8 @@ class Modal extends React.PureComponent<ModalProps, any> {
                       <h5 className="modal-title">{this.props.title}</h5>
                       {this.props.onClose != null && (
                         <Clickable onClick={this.props.onClose}>
-                          <div className="close">
-                            <FontAwesomeIcon icon={faTimes} />
+                          <div>
+                            <SvgTimes style={{ width: 10 }} />
                           </div>
                         </Clickable>
                       )}

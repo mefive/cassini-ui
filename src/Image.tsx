@@ -1,6 +1,14 @@
 import * as React from 'react';
-import { omit } from 'lodash';
+import omit from 'lodash-es/omit';
 import { keys } from 'ts-transformer-keys';
+import Central from './Central';
+
+const dimensionCache: {
+  [s: string]: {
+    width: number,
+    height: number,
+  }
+} = {};
 
 export enum ImageMode {
   MODE_STRETCH = 'stretch',
@@ -9,20 +17,24 @@ export enum ImageMode {
   MODE_INNER_CUT = 'inner_cut'
 }
 
-type ImageProps = {
-  mode: ImageMode;
+interface Props {
+  className?: string;
+  mode?: ImageMode;
   backgroundColor?: string;
-};
+  defaultUrl?: string;
+  width?: number | string;
+  height?: number | string;
+  loading?: JSX.Element | string;
+}
 
-class Image extends React.PureComponent<ImageProps & React.ImgHTMLAttributes<any>> {
+export type ImageProps = Props & React.ImgHTMLAttributes<any>;
+
+class Image extends React.PureComponent<ImageProps> {
   static defaultProps = {
-    src: null,
     alt: 'image',
-    width: null,
-    height: null,
-    mode: 'auto',
-    className: null,
-    backgroundColor: '#fff',
+    mode: ImageMode.MODE_AUTO,
+    backgroundColor: 'transparent',
+    loading: '...',
   };
 
   private container: HTMLDivElement = null;
@@ -49,11 +61,38 @@ class Image extends React.PureComponent<ImageProps & React.ImgHTMLAttributes<any
       // eslint-disable-next-line
       this.setState({ width, height });
     }
+
+    if (this.props.src in dimensionCache) {
+      this.onLoad();
+    }
+  }
+
+  componentDidUpdate({ width, height, src }) {
+    if ((width !== this.props.width || height !== this.props.height) && src in dimensionCache) {
+      this.onLoad();
+    }
   }
 
   onLoad = () => {
     const { clientWidth: containerWidth, clientHeight: containerHeight } = this.container;
-    const { clientWidth: imageWidth, clientHeight: imageHeight } = this.fakeImage;
+
+    let imageWidth;
+    let imageHeight;
+
+    if (this.props.src in dimensionCache) {
+      const dimension = dimensionCache[this.props.src];
+
+      imageWidth = dimension.width;
+      imageHeight = dimension.height;
+    } else {
+      imageWidth = this.fakeImage.clientWidth;
+      imageHeight = this.fakeImage.clientHeight;
+
+      dimensionCache[this.props.src] = {
+        width: imageWidth,
+        height: imageHeight,
+      };
+    }
 
     const containerAspectRatio = containerWidth / containerHeight;
     const imageAspectRatio = imageWidth / imageHeight;
@@ -95,13 +134,15 @@ class Image extends React.PureComponent<ImageProps & React.ImgHTMLAttributes<any
   };
 
   render() {
-    const imagePropsKeys = keys<ImageProps>();
-    const props = omit(this.props, imagePropsKeys);
+    const props = omit(this.props, keys<Props>());
+    const { hasLoaded } = this.state;
+    const { mode } = this.props;
 
-    if (this.props.mode === ImageMode.MODE_AUTO) {
+    if (mode === ImageMode.MODE_AUTO) {
       return (
         <img
-          {...props}
+          className={this.props.className}
+          src={this.props.src}
           alt={this.props.alt}
           style={{ width: this.props.width, height: 'auto' }}
         />
@@ -110,29 +151,56 @@ class Image extends React.PureComponent<ImageProps & React.ImgHTMLAttributes<any
 
     return (
       <div
-        {...props}
         style={{
           width: this.props.width,
           height: this.props.height,
           overflow: 'hidden',
           backgroundColor: this.props.backgroundColor,
+          position: 'relative',
+          display: 'inline-block',
         }}
         ref={(el) => { this.container = el; }}
+        className={this.props.className}
       >
-        <img
-          {...props}
-          alt={this.props.alt}
-          style={{
-            width: this.state.width,
-            height: this.state.height,
-            marginLeft: this.state.marginLeft,
-            marginTop: this.state.marginTop,
-          }}
-        />
+        {(!hasLoaded && mode !== ImageMode.MODE_STRETCH) && (
+          <React.Fragment>
+            {this.props.defaultUrl != null
+              ? (
+                <img
+                  style={{ width: '100%', height: '100%' }}
+                  src={this.props.defaultUrl}
+                  alt="default"
+                />
+              )
+              : (
+                <Central
+                  className="bg-white"
+                >
+                  {this.props.loading}
+                </Central>
+              )}
+          </React.Fragment>
+        )}
 
-        {this.props.mode !== ImageMode.MODE_STRETCH && !this.state.hasLoaded && (
+        {(hasLoaded || mode === ImageMode.MODE_STRETCH) && (
           <img
-            style={{ opacity: 0, position: 'fixed' }}
+            {...props}
+            src={this.props.src}
+            alt={this.props.alt}
+            style={{
+              ...(this.props.style || {}),
+              width: this.state.width,
+              height: this.state.height,
+              marginLeft: this.state.marginLeft,
+              marginTop: this.state.marginTop,
+            }}
+          />
+        )}
+
+        {mode !== ImageMode.MODE_STRETCH && !hasLoaded && (
+          <img
+            {...props}
+            style={{ opacity: 0, position: 'fixed', zIndex: -1 }}
             src={this.props.src}
             alt={this.props.alt}
             ref={(el) => { this.fakeImage = el; }}

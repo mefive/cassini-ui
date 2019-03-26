@@ -3,7 +3,8 @@ import classNames from 'classnames';
 import styled from 'styled-components';
 import { CustomSelectContext } from './context';
 
-const StyledCustomSelect = styled.div`
+const StyledCustomSelect = styled.button`
+  text-align: left;
   height: auto;
   &.custom-indicator {
     background: none;
@@ -16,7 +17,7 @@ type Props = {
   active?: boolean;
 };
 
-class CustomSelect extends React.PureComponent<Props & React.HTMLAttributes<any>> {
+class CustomSelect extends React.PureComponent<Props & React.ButtonHTMLAttributes<any>> {
   static defaultProps = {
     indicator: null,
     active: false,
@@ -36,12 +37,13 @@ class CustomSelect extends React.PureComponent<Props & React.HTMLAttributes<any>
             <StyledCustomSelect
               {...this.props}
               className={classNames(
-                'custom-select',
+                'custom-select form-control',
                 this.props.className,
                 { active: this.props.active },
                 { 'custom-indicator': indicator != null },
               )}
               ref={(el) => { this.node = el; }}
+              type="button"
             >
               {indicator == null
                 ? children

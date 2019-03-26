@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled from 'styled-components';
-// eslint-disable-next-line typescript/no-unused-vars
 import Modal, { ModalProps, StyledModalDialog } from '../Modal';
 
 export interface DialogProps extends ModalProps {}
@@ -23,7 +22,7 @@ export function DialogFooter(props: JSX.ElementChildrenAttribute) {
   );
 }
 
-const StyledDialog = styled(StyledModalDialog)`
+export const StyledDialog = styled(StyledModalDialog)`
   .modal-body-wrapper {
     display: flex;
     flex-direction: column;
@@ -38,15 +37,18 @@ const StyledDialog = styled(StyledModalDialog)`
 `;
 
 class Dialog extends React.PureComponent<DialogProps> {
+  public modal: Modal = null;
+
   render() {
     const { children, ...props } = this.props;
     return (
       <Modal
         {...props}
         dialog={<StyledDialog />}
+        ref={(el) => { this.modal = el; }}
       >
         {React.Children.map(children, (child: React.FunctionComponentElement<any>) => {
-          if (child.type === DialogBody || child.type === DialogFooter) {
+          if (child && (child.type === DialogBody || child.type === DialogFooter)) {
             return child;
           }
 

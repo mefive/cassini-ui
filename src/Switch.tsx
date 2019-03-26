@@ -16,7 +16,7 @@ const StyledSwitch = styled.div`
   text-align: right;
   user-select: none;
   
-  .csui-switch-ball {
+  .switch-ball {
     position: absolute;
     height: 20px;
     width: 20px;
@@ -33,7 +33,7 @@ const StyledSwitch = styled.div`
   &.ready {
     transition: background-color .2s;
 
-    .csui-switch-ball {
+    .switch-ball {
       transition: left .2s;
     }
   }
@@ -47,6 +47,7 @@ export interface SwitchProps {
   falseText?: string;
   width?: number;
   disabled?: boolean;
+  ballSize?: number;
 }
 
 class Switch extends React.PureComponent<SwitchProps> {
@@ -57,6 +58,7 @@ class Switch extends React.PureComponent<SwitchProps> {
     falseText: null,
     width: null,
     disabled: false,
+    ballSize: 20,
   };
 
   state = {
@@ -101,13 +103,13 @@ class Switch extends React.PureComponent<SwitchProps> {
           ref={(el) => { this.node = el; }}
         >
           <div
-            className="csui-switch-ball"
+            className="switch-ball"
             style={{
-              left: value ? this.state.width - 2 - 20 : 2,
+              left: value ? this.state.width - 2 - this.props.ballSize : 2,
             }}
           />
 
-          <span className="csui-switch-text">
+          <span className="switch-text">
             {value ? trueText : falseText}
           </span>
         </StyledSwitch>

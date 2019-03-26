@@ -1,6 +1,6 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import { omit } from 'lodash';
+import omit from 'lodash-es/omit';
 import { keys } from 'ts-transformer-keys';
 import safeSetState from '../safeSetState';
 import StyledPopover from './styled';

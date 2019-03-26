@@ -1,16 +1,14 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import { debounce } from 'lodash';
+import debounce from 'lodash-es/debounce';
 import { scrollTop } from 'dom-helpers/query';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import * as keyCode from 'keycode';
 import { Animation } from '../Animate';
+import SvgTimes from '../icons/solid/Times';
 import Input from '../Input';
 import Trigger from '../Trigger';
 import Clickable from '../Clickable';
 import Popover, { Placement } from '../Popover';
-import Focusable from '../Focusable';
 import safeSetState from '../safeSetState';
 import CustomSelect from '../CustomSelect';
 
@@ -206,7 +204,7 @@ class Select extends React.PureComponent<SelectProps> {
           <div className="csui-select-choice-wrapper">
             {multipleValue.map(v => (
               <div className="csui-select-choice" key={`${v}`}>
-                <span>{renderTitle(optionCache[`${v}`] || {})}</span>
+                <div>{renderTitle(optionCache[`${v}`] || {})}</div>
 
                 {!this.props.disabled && (
                   <Clickable
@@ -218,7 +216,7 @@ class Select extends React.PureComponent<SelectProps> {
                       this.props.onChange(newValue);
                     }}
                   >
-                    <FontAwesomeIcon icon={faTimes} />
+                    <SvgTimes style={{ width: 10 }} />
                   </Clickable>
                 )}
               </div>
@@ -304,22 +302,17 @@ class Select extends React.PureComponent<SelectProps> {
           </Popover>
         )}
       >
-        <div className={this.props.className}>
-          <StyledSelect>
-            <Focusable>
-              <CustomSelect
-                active={this.state.active}
-                ref={(el) => { this.anchor = el; }}
-                style={{
-                  minWidth: this.props.width,
-                }}
-                role="button"
-              >
-                {this.renderTitle()}
-              </CustomSelect>
-            </Focusable>
-          </StyledSelect>
-        </div>
+        <StyledSelect
+          className={this.props.className}
+          active={this.state.active}
+          ref={(el) => { this.anchor = el; }}
+          style={{
+            minWidth: this.props.width,
+          }}
+          disabled={this.props.disabled}
+        >
+          {this.renderTitle()}
+        </StyledSelect>
       </Trigger>
     );
   }

@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { keys } from 'ts-transformer-keys';
-import { uniqueId, omit } from 'lodash';
+import uniqueId from 'lodash-es/uniqueId';
 import styled from 'styled-components';
 
 const StyledCheckbox = styled.div`
@@ -18,9 +17,13 @@ const StyledCheckbox = styled.div`
 type Props = {
   icon?: (checked: boolean) => JSX.Element;
   children?: JSX.Element | string;
+  value?: boolean;
+  onChange?: (value: boolean, e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-type CheckboxProps = Props & React.InputHTMLAttributes<any>;
+type I = React.InputHTMLAttributes<any>;
+
+type CheckboxProps = Props & Pick<I, Exclude<keyof I, 'value' | 'onChange'>>;
 
 class Checkbox extends React.PureComponent<CheckboxProps> {
   static defaultProps = {
@@ -35,25 +38,27 @@ class Checkbox extends React.PureComponent<CheckboxProps> {
   }
 
   render() {
-    const { icon } = this.props;
-
-    const checkboxKeys = keys<Props>();
+    const {
+      icon, children, value, onChange, className, ...props
+    } = this.props;
 
     return (
-      <StyledCheckbox>
+      <StyledCheckbox className={className}>
         <label
           htmlFor={this.id}
         >
           {icon != null && icon(this.props.checked)}
 
           <input
-            {...omit(this.props, checkboxKeys)}
+            {...props}
+            checked={value}
             type="checkbox"
             id={this.id}
             hidden={icon != null}
+            onChange={e => onChange(e.target.checked, e)}
           />
 
-          {this.props.children}
+          {children}
         </label>
       </StyledCheckbox>
     );
